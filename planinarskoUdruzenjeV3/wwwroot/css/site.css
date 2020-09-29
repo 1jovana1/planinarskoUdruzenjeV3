@@ -83,7 +83,20 @@ body {
 }
 
 .background-image {
-    background-image: url("../images/wallpaperflare.com_wallpaper.jpg");
+    background-image: url("../images/jerry-zhang-Y8lCoTRgHPE-unsplash.jpg");
     background-size: cover;
     background-repeat: no-repeat;
+}
+.details {
+    color: black;
+    font-weight: bold;
+    transition: step-end;
+    background-color:white;
+    opacity:0.7;
+    
+}
+.edit {
+    font-weight: 600;
+    text-shadow: 1px 0 0 #fff, -1px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+    color: black;
 }

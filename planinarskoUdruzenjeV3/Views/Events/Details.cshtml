@@ -7,7 +7,7 @@
 <h1>Detalji</h1>
 
 <div>
-    <dl class="row">
+    <dl class="row details">
         <dt class="col-sm-12">
             <h2>@Html.DisplayFor(model => model.Title)</h2>
         </dt>
@@ -59,9 +59,14 @@
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.CreatedAt)
         </dd>
+        <dt class="col-sm-3">
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.Id">Izmijeni</a> |
+                <a asp-action="Index">Nazad</a>
+            </div>
+        </dt>
+       
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Izmijeni</a> |
-    <a asp-action="Index">Nazad</a>
+
+   
 </div>
