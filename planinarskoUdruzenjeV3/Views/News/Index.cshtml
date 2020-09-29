@@ -1,0 +1,42 @@
+﻿@model IEnumerable<planinarskoUdruzenjeV3.Models.News>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-transparent">
+            <div class="card-header">
+                <div class="card-text float-right">
+                    <div class="card-title">
+                        <a class="btn btn-info" asp-action="Create"><i class="fas fa-plus mr-2"></i>Dodaj novo</a>
+                    </div>
+                </div>
+                <h2 class="card-title">
+                    <i class="far fa-newspaper mr-4"></i>Obavještenja
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-md-6">
+                            <div class="card flex-md-row mb-4 box-shadow h-md-250">
+                                <div class="card-body d-flex flex-column align-items-start">
+                                    <strong class="d-inline-block mb-2 text-primary">@item.Category</strong>
+                                    <h3 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h3>
+                                    <div class="mb-1 text-muted">@item.CreatedAt</div>
+                                    <p class="card-text mb-auto max-news-text">@item.Description</p>
+                                    <a asp-action="Details" asp-route-id="@item.Id">Nastavi čitati...</a>
+                                </div>
+                                <img class="card-img-right flex-auto d-none d-md-block" data-src="holder.js/200x250?theme=thumb" alt="Thumbnail [200x250]" style="width: 200px; height: 250px;" src="https://uiaa-web.azureedge.net/wp-content/uploads/2017/11/RTM19-banner-web.jpg" data-holder-rendered="true">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

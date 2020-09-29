@@ -1,0 +1,68 @@
+﻿@model planinarskoUdruzenjeV3.Models.Event
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<h4>Event</h4>
+<hr />
+<form asp-action="Edit" enctype="multipart/form-data">
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-12 form-group">
+            <label asp-for="Title" class="control-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="col-12 form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label asp-for="Date" class="control-label"></label>
+            <input asp-for="Date" class="form-control" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label asp-for="Deadline" class="control-label"></label>
+            <input asp-for="Deadline" class="form-control" />
+            <span asp-validation-for="Deadline" class="text-danger"></span>
+        </div>
+        <div class="col-12 form-group">
+            <label asp-for="Location" class="control-label"></label>
+            <input asp-for="Location" class="form-control" />
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label asp-for="MaxParticipanst" class="control-label"></label>
+            <input asp-for="MaxParticipanst" class="form-control" />
+            <span asp-validation-for="MaxParticipanst" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label asp-for="Price" class="control-label"></label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="control-label">File</label>
+            <input class="form-control" type="file" id="Avatar" name="files" />
+        </div>
+
+        <div class="col-12 text-right">
+            <a class="btn btn-link ml-auto" type="button" asp-action="Index">Back</a>
+            <button class="btn btn-primary" type="submit">Save</button>
+        </div>
+    </div>
+</form>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        CKEDITOR.replace("Description");
+    </script>
+
+}

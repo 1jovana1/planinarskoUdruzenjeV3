@@ -1,0 +1,67 @@
+﻿@model planinarskoUdruzenjeV3.Models.Event
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalji</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-12">
+            <h2>@Html.DisplayFor(model => model.Title)</h2>
+        </dt>
+        <dt class="col-sm-3">
+            Opis
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-3">
+            Datum održavanja
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class="col-sm-3">
+            Rok za prijavu
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Deadline)
+        </dd>
+        <dt class="col-sm-3">
+            Maksimalan broj učesnika
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.MaxParticipanst)
+        </dd>
+        <dt class="col-sm-3">
+            Lokacija
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+        <dt class="col-sm-3">
+            Cijena
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class="col-sm-3">
+            Kreirao
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+        <dt class="col-sm-3">
+            Datum i vrijeme kreiranja
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.CreatedAt)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Izmijeni</a> |
+    <a asp-action="Index">Nazad</a>
+</div>
