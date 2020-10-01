@@ -27,7 +27,7 @@ namespace planinarskoUdruzenjeV3
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<planinarskoUdruzenjeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PlaninarskoUdruzenjeContext")));
+            services.AddDbContext<PlaninarskoUdruzenjeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PlaninarskoUdruzenjeContext")));
 
         }
 

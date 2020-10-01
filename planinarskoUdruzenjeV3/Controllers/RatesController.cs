@@ -11,9 +11,9 @@ namespace planinarskoUdruzenjeV3.Controllers
 {
     public class RatesController : Controller
     {
-        private readonly planinarskoUdruzenjeContext _context;
+        private readonly PlaninarskoUdruzenjeContext _context;
 
-        public RatesController(planinarskoUdruzenjeContext context)
+        public RatesController(PlaninarskoUdruzenjeContext context)
         {
             _context = context;
         }

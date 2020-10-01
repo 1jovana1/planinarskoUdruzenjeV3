@@ -14,7 +14,7 @@ namespace planinarskoUdruzenjeV3.Models
         public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public virtual Event Event { get; set; }
-        public virtual News News { get; set; }
+        public Event Event { get; set; }
+        public News News { get; set; }
     }
 }

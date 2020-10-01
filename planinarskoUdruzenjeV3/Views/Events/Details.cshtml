@@ -59,14 +59,18 @@
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.CreatedAt)
         </dd>
+
+        <dd class="col-sm-12">
+            <img src='<%= Url.Action( "show", "file", new { id = 7] } ) %>' />
+        </dd>
         <dt class="col-sm-3">
             <div>
                 <a asp-action="Edit" asp-route-id="@Model.Id">Izmijeni</a> |
                 <a asp-action="Index">Nazad</a>
             </div>
         </dt>
-       
+
     </dl>
 
-   
+    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Izbriši</a>
 </div>

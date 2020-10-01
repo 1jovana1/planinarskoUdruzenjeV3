@@ -16,9 +16,9 @@ namespace planinarskoUdruzenjeV3.Controllers
 {
     public class EventsController : Controller
     {
-        private readonly planinarskoUdruzenjeContext _context;
+        private readonly PlaninarskoUdruzenjeContext _context;
 
-        public EventsController(planinarskoUdruzenjeContext context)
+        public EventsController(PlaninarskoUdruzenjeContext context)
         {
             _context = context;
         }
@@ -58,12 +58,11 @@ namespace planinarskoUdruzenjeV3.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Description,Date,Deadline,MaxParticipanst,Location,Price,CreatedBy,CreatedAt")] Event @event, List<IFormFile> files)
+        public async Task<IActionResult> Create([Bind("Title,Description,Date,Deadline,MaxParticipanst,Location,Price")] Event @event, List<IFormFile> files)
         {
             if (ModelState.IsValid)
             {
                 _context.Event.Add(@event);
-              //  _context.SaveChanges();
                 //add files
                 foreach (var formFile in files)
                 {
@@ -77,8 +76,8 @@ namespace planinarskoUdruzenjeV3.Controllers
                             {
                                 FileName = formFile.FileName,
                                 ContentType = formFile.ContentType,
-                                Content = memoryStream.ToArray(),
-                              //  EventId = @event.Id
+                                Content = memoryStream.ToArray()
+                                //  EventId = @event.Id
                             };
 
                             @event.File.Add(file);
@@ -88,9 +87,6 @@ namespace planinarskoUdruzenjeV3.Controllers
 
                 }
                 await _context.SaveChangesAsync();
-
-
-
 
                 return RedirectToAction(nameof(Index));
             }
@@ -171,7 +167,7 @@ namespace planinarskoUdruzenjeV3.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            //Delete foraign key
+            //Delete foreign key
             var files =  _context.File.Where(x => x.EventId == id);
             _context.File.RemoveRange(files);
             //Delete event

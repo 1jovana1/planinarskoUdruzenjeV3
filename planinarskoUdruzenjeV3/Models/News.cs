@@ -18,7 +18,7 @@ namespace planinarskoUdruzenjeV3.Models
         public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public virtual ICollection<File> File { get; set; }
+        public ICollection<File> File { get; set; }
 
         [NotMapped]
         public static string[] GetCategoryList = { "Aktuelno", "Novosti" };

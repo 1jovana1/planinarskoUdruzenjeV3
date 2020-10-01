@@ -1,10 +1,10 @@
 ﻿@model planinarskoUdruzenjeV3.Models.Event
 
 @{
-    ViewData["Title"] = "Dodaj novo obavještenje";
+    ViewData["Title"] = "Dodaj novu planinarsku akciju";
 }
 
-<h1>Dodaj novo obavještenje</h1>
+<h1>Dodaj novu planinarsku akciju</h1>
 
 
 <form asp-action="Create" enctype="multipart/form-data">
@@ -47,7 +47,7 @@
         </div>
         <div class="col-md-4 form-group">
             <label class="control-label">Dodaj prilog</label>
-            <input class="form-control" type="file" id="Avatar" name="files" />
+            <input class="form-control" type="file" name="files" />
         </div>
 
         <div class="col-12 text-right">

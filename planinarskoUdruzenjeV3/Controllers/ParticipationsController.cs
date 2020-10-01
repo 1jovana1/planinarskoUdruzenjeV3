@@ -11,9 +11,9 @@ namespace planinarskoUdruzenjeV3.Controllers
 {
     public class ParticipationsController : Controller
     {
-        private readonly planinarskoUdruzenjeContext _context;
+        private readonly PlaninarskoUdruzenjeContext _context;
 
-        public ParticipationsController(planinarskoUdruzenjeContext context)
+        public ParticipationsController(PlaninarskoUdruzenjeContext context)
         {
             _context = context;
         }

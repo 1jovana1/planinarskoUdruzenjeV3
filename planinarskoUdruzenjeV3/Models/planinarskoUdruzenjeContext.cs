@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace planinarskoUdruzenjeV3.Models
 {
-    public partial class planinarskoUdruzenjeContext : DbContext
+    public partial class PlaninarskoUdruzenjeContext : DbContext
     {
-        public planinarskoUdruzenjeContext()
+        public PlaninarskoUdruzenjeContext()
         {
         }
 
-        public planinarskoUdruzenjeContext(DbContextOptions<planinarskoUdruzenjeContext> options)
+        public PlaninarskoUdruzenjeContext(DbContextOptions<PlaninarskoUdruzenjeContext> options)
             : base(options)
         {
         }
@@ -25,7 +25,7 @@ namespace planinarskoUdruzenjeV3.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+
                 optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb; Initial Catalog=planinarskoUdruzenje;");
             }
         }

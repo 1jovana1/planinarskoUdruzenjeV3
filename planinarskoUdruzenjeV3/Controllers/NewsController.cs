@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +13,9 @@ namespace planinarskoUdruzenjeV3.Controllers
 {
     public class NewsController : Controller
     {
-        private readonly planinarskoUdruzenjeContext _context;
+        private readonly PlaninarskoUdruzenjeContext _context;
 
-        public NewsController(planinarskoUdruzenjeContext context)
+        public NewsController(PlaninarskoUdruzenjeContext context)
         {
             _context = context;
         }
@@ -58,15 +60,36 @@ namespace planinarskoUdruzenjeV3.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Category,CreatedBy,CreatedAt")] News news)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Category,CreatedBy,CreatedAt")] News @news, List<IFormFile> files)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(news);
+                //_context.Add(news);
+                _context.News.Add(@news);
+                //add file
+                foreach (var formFile in files)
+                {
+                    if (formFile.Length > 0)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await formFile.CopyToAsync(memoryStream);
+
+                            var file = new Models.File()
+                            {
+                                FileName = formFile.FileName,
+                                ContentType = formFile.ContentType,
+                                Content = memoryStream.ToArray()
+                            };
+
+                            @news.File.Add(file);
+                        }
+                    }
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(news);
+            return View(@news);
         }
 
         // GET: News/Edit/5
@@ -143,6 +166,10 @@ namespace planinarskoUdruzenjeV3.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            //Delete foreign key
+            var files = _context.File.Where(x => x.NewsId == id);
+            _context.File.RemoveRange(files);
+            //Delete news
             var news = await _context.News.FindAsync(id);
             _context.News.Remove(news);
             await _context.SaveChangesAsync();
