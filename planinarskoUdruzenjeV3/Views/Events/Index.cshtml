@@ -31,7 +31,7 @@
                                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
                                     <a class="btn btn-info" asp-action="Edit" asp-route-id="@item.Id">Uredi</a>
                                     <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Opširno</a>
-                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id " onclick="return confirm('Are you sure you want to delete this item?');">Izbriši</a>
+                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Izbriši</a>
                                 </div>
                             </div>
                         </div>
@@ -41,4 +41,6 @@
         </div>
     </div>
 </div>
-
+<div class="d-flex w-100 justify-content-center">
+    <pagination page-count="@ViewBag.TotalPages" page-target="/events/index/" page-number="@ViewBag.PageNumber" page-range="@ViewBag.PageRange"></pagination>
+</div>

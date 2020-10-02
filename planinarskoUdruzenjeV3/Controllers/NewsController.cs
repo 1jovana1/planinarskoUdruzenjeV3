@@ -21,14 +21,28 @@ namespace planinarskoUdruzenjeV3.Controllers
         }
 
         // GET: News
-        public async Task<IActionResult> Index(string category)
+        public async Task<IActionResult> Index(string category, int p=1)
         {
-            if(category == null)
+            int pageSize = 6;
+            ViewBag.PageNumber = p;
+            ViewBag.PageRange = pageSize;
+            ViewBag.Category = category; 
+            if (category != null)
             {
-                return View(await _context.News.ToListAsync());
+               var news = _context.News.Where(x => x.Category == category);
+               ViewBag.TotalPages = (int)Math.Ceiling((decimal)news.Count() / pageSize);
+               news = news.Skip((p - 1) * pageSize).Take(pageSize);
+               return View(await news.ToListAsync());
+            }
+            else
+            {
+                var news = _context.News.Skip((p - 1) * pageSize).Take(pageSize);
+                ViewBag.TotalPages = (int)Math.Ceiling((decimal)_context.News.Count() / pageSize);
+                return View(await news.ToListAsync());
             }
 
-            return View(await _context.News.Where(x=>x.Category == category).ToListAsync());
+
+
         }
 
         // GET: News/Details/5
