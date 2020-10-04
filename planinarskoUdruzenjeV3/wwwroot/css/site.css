@@ -103,3 +103,27 @@ body {
     width:95px;
     margin:2px;
 }
+.jumbotron {
+    color: white;
+    background-image: url("../images/arthur-poulin-NhU0nUR7920-unsplash.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+.carousel-item {
+    height: calc(100vh - 50px);
+    min-height: 350px;
+    background: no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+
+.carousel-caption-center {
+    top: 50%;
+    transform: translateY(-50%);
+    bottom: initial;
+}
