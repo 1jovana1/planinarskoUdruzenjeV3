@@ -17,9 +17,10 @@ namespace planinarskoUdruzenjeV3.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int id)
         {
-            return View();
+            var fileToRetrieve = _context.File.Find(id);
+            return File(fileToRetrieve.Content, fileToRetrieve.ContentType);
         }
 
         //public ActionResult Show(int id)

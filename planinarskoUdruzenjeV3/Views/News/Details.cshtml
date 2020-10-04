@@ -8,9 +8,9 @@
 
 <div>
     <dl class="row details">
-        <dt class="col-sm-12">
+        <dd class="col-sm-12">
             <h2>@Html.DisplayFor(model => model.Title)</h2>
-        </dt>
+        </dd>
         <dd class="col-sm-12">
             @Html.DisplayFor(model => model.Category)
         </dd>
@@ -18,7 +18,7 @@
             @Html.DisplayFor(model => model.CreatedAt)
         </dd>
         <dd class="col-sm-12">
-            @Html.DisplayFor(model => model.Description)
+            @Html.Raw(Model.Description)
         </dd>
         <dd class="col-sm-12">
         </dd>
@@ -28,13 +28,41 @@
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.CreatedBy)
         </dd>
-        <dt class="col-sm-3">
-            <div>
-                <a asp-action="Edit" asp-route-id="@Model.Id">Izmijeni</a> |
-                <a asp-action="Index">Nazad</a>
-            </div>
-        </dt>
+        <dd class="colsm12">
+             @foreach (var item in Model.File)
+              {
+                 @if (!item.IsImage())
+                  {
+                     <a class="mr-3" href="~/File?id=@item.Id">@item.FileName</a>
+                  }
+              }
+           
+        </dd>
     </dl>
+    <div class="row">
+
+        <div class="row">
+            @foreach (var item in Model.File)
+            {
+                @if (item.IsImage())
+                {
+                    <div class="col-md-4 col-sm-6">
+                        <a target="_blank" href="~/File?id=@item.Id">
+                            <img src="~/File?id=@item.Id" class="w-100" style="height:250px">
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+
+
+    </div>
+    <div class="col-sm-3">
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id">Izmijeni</a> |
+            <a asp-action="Index">Nazad</a>
+        </div>
+    </div>
     <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Izbriši</a>
 
 </div>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 
 namespace planinarskoUdruzenjeV3.Models
 {
@@ -13,8 +15,15 @@ namespace planinarskoUdruzenjeV3.Models
         public int? NewsId { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
+        
+        public bool IsImage()
+        {
+
+            return this.ContentType.Contains("image");
+        }
 
         public Event Event { get; set; }
         public News News { get; set; }
+
     }
 }

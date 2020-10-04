@@ -20,6 +20,18 @@ namespace planinarskoUdruzenjeV3.Controllers
             _context = context;
         }
 
+        public IActionResult Image(int id)
+        {
+            var fileToRetrieve = _context.File.Where(x=>x.NewsId == id).FirstOrDefault();
+            if(fileToRetrieve == null)
+            {
+                var path = "~/images/wallpaperflare.com_wallpaper.jpg";
+                return File(path, "image/jpeg");
+            }
+
+            return File(fileToRetrieve.Content, fileToRetrieve.ContentType);
+        }
+
         // GET: News
         public async Task<IActionResult> Index(string category, int p=1)
         {
@@ -53,8 +65,7 @@ namespace planinarskoUdruzenjeV3.Controllers
                 return NotFound();
             }
 
-            var news = await _context.News
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var news = await _context.News.Include(x=>x.File).FirstOrDefaultAsync(m => m.Id == id);
             if (news == null)
             {
                 return NotFound();

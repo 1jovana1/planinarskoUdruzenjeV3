@@ -24,14 +24,22 @@
                 <div class="row">
                     @foreach (var item in Model)
                     {
-                        <div class="col-md-4 col-sm-6">
+                        <div class="col-md-3 col-sm-6">
                             <div class="card mb-4">
-                                <img class="card-img-top" src="https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg" alt="Card image cap">
+                                <a asp-action="Details" asp-route-id="@item.Id">
+                                    <img class="card-img-top" src="~/Events/Image/?id=@item.Id" style="width: 242px; height: 220px;" alt="Card image cap">
+                                </a>
                                 <div class="card-body">
                                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
-                                    <a class="btn btn-info" asp-action="Edit" asp-route-id="@item.Id">Uredi</a>
-                                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Opširno</a>
-                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Izbriši</a>
+                                    @*<div>
+
+                                        <a class="btn btn-primary dugme" asp-action="Details" asp-route-id="@item.Id">Opširno</a>
+                                        <a class="btn btn-dark dugme" asp-action="">Prijavi se</a>
+                                    </div>*@
+                                    <div>
+                                        <a class="btn btn-danger dugme" asp-action="Delete" asp-route-id="@item.Id">Izbriši</a>
+                                        <a class="btn btn-info dugme" asp-action="Edit" asp-route-id="@item.Id">Uredi</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -23,11 +23,21 @@ namespace planinarskoUdruzenjeV3.Controllers
         {
             _context = context;
         }
-
+        public IActionResult Image(int id)
+        {
+            var fileToRetrieve = _context.File.Where(x => x.EventId == id).FirstOrDefault();
+            if (fileToRetrieve == null)
+            {
+                var path = "~/images/photo-1473984951266-787b955c9e0b.jpg";
+                return File(path, "image/jpeg");
+            }
+           
+            return File(fileToRetrieve.Content, fileToRetrieve.ContentType);
+        }
         // GET: Events
         public async Task<IActionResult> Index(int p=1)
         {
-            int pageSize = 6;
+            int pageSize = 8;
             var events = _context.Event.Skip((p - 1) * pageSize).Take(pageSize);
 
             ViewBag.PageNumber = p;
