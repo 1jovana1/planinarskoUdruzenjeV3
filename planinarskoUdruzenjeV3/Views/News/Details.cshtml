@@ -28,7 +28,7 @@
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.CreatedBy)
         </dd>
-        <dd class="colsm12">
+        <dd class="col-sm-12">
              @foreach (var item in Model.File)
               {
                  @if (!item.IsImage())
@@ -40,22 +40,17 @@
         </dd>
     </dl>
     <div class="row">
-
-        <div class="row">
-            @foreach (var item in Model.File)
+        @foreach (var item in Model.File)
+        {
+            @if (item.IsImage())
             {
-                @if (item.IsImage())
-                {
-                    <div class="col-md-4 col-sm-6">
-                        <a target="_blank" href="~/File?id=@item.Id">
-                            <img src="~/File?id=@item.Id" class="w-100" style="height:250px">
-                        </a>
-                    </div>
-                }
+                <div class="col-md-4 col-sm-6">
+                    <a target="_blank" href="~/File?id=@item.Id">
+                        <img src="~/File?id=@item.Id" class="w-100" style="height:250px">
+                    </a>
+                </div>
             }
-        </div>
-
-
+        }
     </div>
     <div class="col-sm-3">
         <div>

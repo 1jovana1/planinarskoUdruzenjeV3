@@ -7,9 +7,9 @@
 
 <form asp-action="Edit" enctype="multipart/form-data">
     <div class="row edit">
-        <div asp-validation-summary="ModelOnly" class="text-danger">Naziv</div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="col-12 form-group">
-            <label asp-for="Title" class="control-label"></label>
+            <label asp-for="Title" class="control-label">Naziv</label>
             <input asp-for="Title" class="form-control" />
             <span asp-validation-for="Title" class="text-danger"></span>
         </div>
@@ -45,9 +45,36 @@
         </div>
         <div class="col-md-4 form-group">
             <label class="control-label">Prilog</label>
-            <input class="form-control" type="file" id="Avatar" name="files" />
+            <input class="form-control" type="file" id="Avatar" name="files" multiple />
         </div>
+        <div class="col-12">
+            <div class="col-sm-12">
+                @foreach (var item in Model.File)
+                {
+                    @if (!item.IsImage())
+                    {
+                        <a class="mr-3" href="~/File?id=@item.Id">@item.FileName</a>
+                    }
+                }
 
+            </div>
+
+            <div class="row">
+                @foreach (var item in Model.File)
+                {
+                    @if (item.IsImage())
+                    {
+                        <div class="col-md-4 col-sm-6">
+                            <a target="_blank" href="~/File?id=@item.Id">
+                                <img src="~/File?id=@item.Id" class="w-100" style="height:250px">
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
+
+
+        </div>
         <div class="col-12 text-right">
             <a class="btn btn-link ml-auto" type="button" asp-action="Index">Nazad</a>
             <button class="btn btn-primary" type="submit">Sačuvaj</button>

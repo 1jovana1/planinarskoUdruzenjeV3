@@ -125,7 +125,7 @@ namespace planinarskoUdruzenjeV3.Controllers
                 return NotFound();
             }
 
-            var news = await _context.News.FindAsync(id);
+            var news = await _context.News.Include(x=>x.File).SingleOrDefaultAsync(x => x.Id == id);
             if (news == null)
             {
                 return NotFound();

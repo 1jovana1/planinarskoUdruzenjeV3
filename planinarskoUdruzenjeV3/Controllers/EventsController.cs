@@ -55,8 +55,7 @@ namespace planinarskoUdruzenjeV3.Controllers
                 return NotFound();
             }
 
-            var @event = await _context.Event
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var @event = await _context.Event.Include(x => x.File).FirstOrDefaultAsync(m => m.Id == id);
             if (@event == null)
             {
                 return NotFound();
@@ -118,8 +117,8 @@ namespace planinarskoUdruzenjeV3.Controllers
             {
                 return NotFound();
             }
-
-            var @event = await _context.Event.FindAsync(id);
+            var news = await _context.News.Include(x => x.File).SingleOrDefaultAsync(x => x.Id == id);
+            var @event = await _context.Event.Include(x=>x.File).SingleOrDefaultAsync(x => x.Id == id);
             if (@event == null)
             {
                 return NotFound();

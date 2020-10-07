@@ -61,8 +61,28 @@
         </dd>
 
         <dd class="col-sm-12">
-            <img src='<%= Url.Action( "show", "file", new { id = 7] } ) %>' />
+            @foreach (var item in Model.File)
+            {
+                @if (!item.IsImage())
+                {
+                    <a class="mr-3" href="~/File?id=@item.Id">@item.FileName</a>
+                }
+            }
+
         </dd>
+        <div class="row">
+            @foreach (var item in Model.File)
+            {
+                @if (item.IsImage())
+                {
+                    <div class="col-md-4 col-sm-6">
+                        <a target="_blank" href="~/File?id=@item.Id">
+                            <img src="~/File?id=@item.Id" class="w-100" style="height:250px">
+                        </a>
+                    </div>
+                }
+            }
+        </div>
         <dt class="col-sm-3">
             <div>
                 <a asp-action="Edit" asp-route-id="@Model.Id">Izmijeni</a> |
