@@ -1,10 +1,11 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace planinarskoUdruzenjeV3.Models
 {
-    public partial class PlaninarskoUdruzenjeContext : DbContext
+    public partial class PlaninarskoUdruzenjeContext : IdentityDbContext
     {
         public PlaninarskoUdruzenjeContext()
         {
@@ -32,6 +33,8 @@ namespace planinarskoUdruzenjeV3.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Event>(entity =>
             {
                 entity.ToTable("event");
