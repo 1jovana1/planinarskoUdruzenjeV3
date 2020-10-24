@@ -27,11 +27,10 @@ namespace planinarskoUdruzenjeV3
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddRazorPages();
 
             services.AddDbContext<PlaninarskoUdruzenjeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PlaninarskoUdruzenjeContext")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<PlaninarskoUdruzenjeContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,10 +49,10 @@ namespace planinarskoUdruzenjeV3
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseAuthentication();
-
             app.UseRouting();
 
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -61,6 +60,7 @@ namespace planinarskoUdruzenjeV3
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

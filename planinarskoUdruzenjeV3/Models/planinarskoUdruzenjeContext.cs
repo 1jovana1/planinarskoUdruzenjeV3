@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using planinarskoUdruzenjeV3.Areas.Identity.Data;
 
 namespace planinarskoUdruzenjeV3.Models
 {
-    public partial class PlaninarskoUdruzenjeContext : IdentityDbContext
+    public partial class PlaninarskoUdruzenjeContext : IdentityDbContext<User>
     {
         public PlaninarskoUdruzenjeContext()
         {
