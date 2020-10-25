@@ -26,7 +26,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Index">Planinarske akcije</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link text-dark dropdown-toggle"  id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Obavještenja</a>
+                            <a class="nav-link text-dark dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Obavještenja</a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" asp-area="" asp-controller="News" asp-action="Index">Sva obavještenja</a>
                                 @foreach (var item in News.GetCategoryList)
@@ -39,7 +39,11 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">O nama</a>
                         </li>
+                            <partial name="_LoginPartial.cshtml" />
+
+                        
                     </ul>
+                    
                 </div>
             </div>
         </nav>
