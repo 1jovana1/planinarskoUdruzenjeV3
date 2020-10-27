@@ -20,13 +20,14 @@ namespace planinarskoUdruzenjeV3.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("PlaninarskoUdruzenjeContext")));
 
-                services.AddDefaultIdentity<User>(options => {
-                    options.SignIn.RequireConfirmedAccount = false; //Kasnije true
+                services.AddIdentity<User, IdentityRole>(options => {
+                    options.SignIn.RequireConfirmedAccount = true; //Kasnije true
                     options.Password.RequireLowercase = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
-                }) 
-                    .AddEntityFrameworkStores<PlaninarskoUdruzenjeContext>();
+                })
+                .AddDefaultUI()
+                .AddEntityFrameworkStores<PlaninarskoUdruzenjeContext>();
             });
         }
     }

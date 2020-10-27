@@ -95,11 +95,9 @@ namespace planinarskoUdruzenjeV3.Controllers
                                 FileName = formFile.FileName,
                                 ContentType = formFile.ContentType,
                                 Content = memoryStream.ToArray()
-                                //  EventId = @event.Id
                             };
 
                             @event.File.Add(file);
-                            //_context.File.Add(file);
                         }
                     }
 
@@ -118,7 +116,7 @@ namespace planinarskoUdruzenjeV3.Controllers
             {
                 return NotFound();
             }
-            var news = await _context.News.Include(x => x.File).SingleOrDefaultAsync(x => x.Id == id);
+
             var @event = await _context.Event.Include(x=>x.File).SingleOrDefaultAsync(x => x.Id == id);
             if (@event == null)
             {
