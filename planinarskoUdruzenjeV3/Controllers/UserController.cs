@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using planinarskoUdruzenjeV3.Areas.Identity.Data;
@@ -11,76 +12,53 @@ namespace planinarskoUdruzenjeV3.Controllers
 {
     public class UserController : Controller
     {
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        private readonly PlaninarskoUdruzenjeContext _context;
-
-        public UserController(PlaninarskoUdruzenjeContext context)
+        public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var users = _context.Users;
-            return View(await users.ToListAsync());
+            var users = await _userManager.Users.ToListAsync();
+            var userRolesViewModel = new List<UserRolesViewModel>();
+            foreach (User user in users)
+            {
+                var thisViewModel = new UserRolesViewModel();
+                thisViewModel.UserId = user.Id;
+                thisViewModel.Email = user.Email;
+                thisViewModel.FirstName = user.FirstName;
+                thisViewModel.LastName = user.LastName;
+                thisViewModel.PhoneNumber = user.PhoneNumber;
+                thisViewModel.Roles = await GetUserRoles(user);
+                thisViewModel.isActive = user.EmailConfirmed;
+                userRolesViewModel.Add(thisViewModel);
+            }
+            return View(userRolesViewModel);
         }
 
-        // GET: User/Edit/5
-        public async Task<IActionResult> Edit(string? id)
+        private async Task<List<string>> GetUserRoles(User user)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            return new List<string>(await _userManager.GetRolesAsync(user));
+        }
 
-            var user = await _context.Users.FindAsync(id);
+        public async Task<IActionResult> Activate (string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
             if (user == null)
             {
                 return NotFound();
             }
-            return View(user);
+
+            user.EmailConfirmed = !user.EmailConfirmed;
+
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction(nameof(Index));
         }
-
-
-        // POST: User/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public  IActionResult Edit(string id, [Bind("Id,FirstName,LastName,PhoneNumber")] User user)
-        {
-            if (id != user.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(user);
-                    _context.SaveChanges();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if ( !UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
-
-        private bool UserExists(string id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
-
     }
 }
