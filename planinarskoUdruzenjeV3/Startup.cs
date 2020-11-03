@@ -31,6 +31,18 @@ namespace planinarskoUdruzenjeV3
 
             services.AddDbContext<PlaninarskoUdruzenjeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PlaninarskoUdruzenjeContext")));
 
+
+            services.AddAuthentication().
+                AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["FacebookLogin:AppId"];
+                facebookOptions.AppSecret = Configuration["FacebookLogin:AppSecret"];
+            }).
+                AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = Configuration["GoogleLogin:ClientId"];
+                googleOptions.ClientSecret = Configuration["GoogleLogin:ClientSecret"];
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
