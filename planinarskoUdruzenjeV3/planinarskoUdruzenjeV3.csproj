@@ -25,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Identity\Pages\Account\Manage\" />
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\lib\dropzone\" />
   </ItemGroup>
