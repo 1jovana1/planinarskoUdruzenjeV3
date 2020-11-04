@@ -49,30 +49,30 @@ namespace planinarskoUdruzenjeV3.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage ="Unesite ime")]
             [DataType(DataType.Text)]
             [Display(Name = "Ime")]
             public string FirstName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Unesite prezime")]
             [DataType(DataType.Text)]
             [Display(Name = "Prezime")]
             public string LastName { get; set; }
 
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Unesite email adresu")]
+            [EmailAddress(ErrorMessage = "Email adresa nije validna")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Unesite lozinku")]
+            [StringLength(100, ErrorMessage = "Lozinka mora sadrzati minimalno 6 karaktera", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Lozinka")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Potvrda lozinke")]
+            [Compare("Password", ErrorMessage = "Lozinke se ne podudaraju")]
             public string ConfirmPassword { get; set; }
         }
 

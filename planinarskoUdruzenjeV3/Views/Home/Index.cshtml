@@ -42,8 +42,14 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">O nama</a>
                         </li>
-                        <partial name="../Shared/_LoginPartial.cshtml" />
-                    </ul> 
+                        @if (User.IsInRole("administrator"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Korisnički nalozi</a>
+                            </li>
+                        }
+                            <partial name="../Shared/_LoginPartial.cshtml" />
+                        </ul> 
                     
                 </div>
             </div>

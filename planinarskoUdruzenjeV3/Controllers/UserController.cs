@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using planinarskoUdruzenjeV3.Models;
 
 namespace planinarskoUdruzenjeV3.Controllers
 {
+    [Authorize(Roles = "administrator")]
     public class UserController : Controller
     {
         private readonly UserManager<User> _userManager;
