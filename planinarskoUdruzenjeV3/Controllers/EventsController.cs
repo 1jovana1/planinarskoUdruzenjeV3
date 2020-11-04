@@ -204,10 +204,23 @@ namespace planinarskoUdruzenjeV3.Controllers
 
         public async Task<IActionResult> Participate(int id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var exist = _context.Participation.Where(x => x.EventId == id && x.UserId == userId).FirstOrDefault();
+            if(exist != null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+
             var participation = new Participation();
             participation.EventId = id;
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            participation.UserId = 1;
+            participation.UserId = userId;
+            participation.IsApproved = 0;
+
+            _context.Participation.Add(participation);
+
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }

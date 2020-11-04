@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using planinarskoUdruzenjeV3.Models;
 
 namespace planinarskoUdruzenjeV3.Migrations
 {
     [DbContext(typeof(PlaninarskoUdruzenjeContext))]
-    partial class PlaninarskoUdruzenjeContextModelSnapshot : ModelSnapshot
+    [Migration("20201104221938_userIdTypeChange")]
+    partial class userIdTypeChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
