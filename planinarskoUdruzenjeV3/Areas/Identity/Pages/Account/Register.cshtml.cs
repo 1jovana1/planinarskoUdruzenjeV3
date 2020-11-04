@@ -74,6 +74,10 @@ namespace planinarskoUdruzenjeV3.Areas.Identity.Pages.Account
             [Display(Name = "Potvrda lozinke")]
             [Compare("Password", ErrorMessage = "Lozinke se ne podudaraju")]
             public string ConfirmPassword { get; set; }
+
+            [DataType(DataType.PhoneNumber)]
+            [Display(Name ="Broj telefona")]
+            public string PhoneNumber { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)

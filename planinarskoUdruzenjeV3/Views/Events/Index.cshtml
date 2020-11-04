@@ -31,11 +31,11 @@
                                 </a>
                                 <div class="card-body">
                                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
-                                    @*<div>
+                                    <div>
 
                                         <a class="btn btn-primary dugme" asp-action="Details" asp-route-id="@item.Id">Opširno</a>
-                                        <a class="btn btn-dark dugme" asp-action="">Prijavi se</a>
-                                    </div>*@
+                                        <a class="btn btn-dark dugme" asp-action="Participate"  asp-route-id="@item.Id">Prijavi se</a>
+                                    </div>
                                     <div>
                                         <a class="btn btn-danger dugme" asp-action="Delete" asp-route-id="@item.Id">Izbriši</a>
                                         <a class="btn btn-info dugme" asp-action="Edit" asp-route-id="@item.Id">Uredi</a>
