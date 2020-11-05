@@ -26,5 +26,6 @@ namespace planinarskoUdruzenjeV3.Models
         public ICollection<File> File { get; set; }
         public ICollection<Participation> Participation { get; set; }
         public ICollection<Rate> Rate { get; set; }
+
     }
 }

@@ -53,19 +53,16 @@ namespace planinarskoUdruzenjeV3.Controllers
         }
 
         // GET: Events/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var @event = await _context.Event.Include(x => x.File).FirstOrDefaultAsync(m => m.Id == id);
             if (@event == null)
             {
                 return NotFound();
             }
 
+            ViewBag.isApproved = IsRegistered(id);
+            ViewBag.Participants = GetParticipants(id);
             return View(@event);
         }
 
@@ -212,6 +209,20 @@ namespace planinarskoUdruzenjeV3.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            var @event = await _context.Event
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (@event == null)
+            {
+                return NotFound();
+            }
+
+            if(@event.Deadline < DateTime.Now)
+            {
+                //ToDo: Dodati ispis greske
+                return RedirectToAction(nameof(Index));
+            }
+
+
 
             var participation = new Participation();
             participation.EventId = id;
@@ -224,5 +235,48 @@ namespace planinarskoUdruzenjeV3.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        private int IsRegistered(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var exist = _context.Participation.Where(x => x.EventId == id && x.UserId == userId).FirstOrDefault();
+            if (exist == null)
+            {
+                return Participation.NOT_EXIST;
+            }
+
+            if(exist.IsApproved == 1)
+            {
+                return Participation.APPROVED;
+            }
+
+            return Participation.NOT_APPROVED;
+
+        }
+
+        private IList<Participant> GetParticipants(int id)
+        {
+            IList<Participant> participants = new List<Participant>();
+            var participantsList = _context.Participation
+                .Include(x => x.User)
+                .Where(x => x.EventId == id)
+                .ToList();
+
+
+            foreach (var item in participantsList)
+            {
+                participants.Add(
+                    new Participant
+                    {
+                        UserId = item.User.Id,
+                        Name = item.User.FirstName + " " + item.User.LastName,
+                        isApproved = Convert.ToBoolean(item.IsApproved)
+                    });
+            }
+
+            return participants;
+        }
+
     }
 }

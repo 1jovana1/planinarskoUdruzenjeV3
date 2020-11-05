@@ -28,7 +28,12 @@
                 <td>@string.Join(" , ", user.Roles.ToList())</td>
                 <td>
                     <form asp-action="Activate" asp-route-id="@user.UserId">
-                        <input class="form-check-input" type="checkbox" @(user.isActive ? "checked" : "") onChange="this.form.submit()">
+                        <label class="switch m-0">
+                            <input class="form-check-input"
+                                   type="checkbox" @(user.isActive ? "checked" : "")
+                                   onChange="this.form.submit()">
+                            <span class="slider round"></span>
+                        </label>
                     </form>
                 </td>
             </tr>
@@ -36,8 +41,3 @@
     </tbody>
 </table>
 
-@section Scripts {
-    <script>
-
-    </script>
-}

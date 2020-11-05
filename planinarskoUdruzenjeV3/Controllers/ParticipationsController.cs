@@ -19,9 +19,11 @@ namespace planinarskoUdruzenjeV3.Controllers
         }
 
         // GET: Participations
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? eventId)
         {
             var planinarskoUdruzenjeContext = _context.Participation.Include(p => p.Event);
+
+
             return View(await planinarskoUdruzenjeContext.ToListAsync());
         }
 
