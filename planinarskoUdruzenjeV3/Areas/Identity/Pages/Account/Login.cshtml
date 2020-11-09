@@ -46,17 +46,12 @@
     </div>
     <div class="col-md-6 col-md-offset-2">
         <section>
-            <h4>Prijavite se preko drugih servisa</h4>
-            <hr />
+
             @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                if ((Model.ExternalLogins?.Count ?? 0) != 0)
                 {
-                    <div>
-                        <p>External login</p>
-                    </div>
-                }
-                else
-                {
+                    <h4>Prijavite se preko drugih servisa</h4>
+                    <hr />
                     <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
                         <div>
                             <p>

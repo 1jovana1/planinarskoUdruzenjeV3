@@ -106,31 +106,38 @@
 
 
     <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Izbriši</a>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Button with data-target
+    </button>
 
-
-    <table class="table table-info">
-        <thead>
-            <tr>
-                <th>Ime i prezime</th>
-                <th>Odobren</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var participant in ViewBag.Participants)
-            {
+    <div class="collapse" id="collapseExample">
+        <table class="table table-info">
+            <thead>
                 <tr>
-                    <td>@participant.Name</td>
-                    <td>
-                        <form asp-action="Activate" asp-route-id="@participant.UserId">
-                            <input class="form-check-input" 
-                                   type="checkbox" @(participant.isApproved ? "checked" : "") 
-                                   onChange="this.form.submit()">
-                        </form>
-                    </td>
+                    <th>Ime i prezime</th>
+                    <th>Odobren</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+
+                @foreach (var participant in ViewBag.Participants)
+                {
+                    <tr>
+                        <td>@participant.Name</td>
+                        <td>
+                            <form asp-action="Activate">
+                                <input type="hidden" value="@Model.Id" name="eventId" />
+                                <input type="hidden" value="@participant.UserId" name="userId" />
+                                <input class="form-check-input" name="isApproved"
+                                       type="checkbox" @(participant.isApproved ? "checked" : "")
+                                       onChange="this.form.submit()">
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
 
 </div>

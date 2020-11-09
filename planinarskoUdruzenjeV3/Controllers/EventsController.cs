@@ -278,5 +278,26 @@ namespace planinarskoUdruzenjeV3.Controllers
             return participants;
         }
 
+        public async Task<IActionResult> Activate(string userId, int eventId)
+        {
+            var participation = await _context.Participation
+                .Where(x => x.EventId == eventId && x.UserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (participation == null)
+            {
+                return NotFound();
+            }
+
+            participation.IsApproved = Convert.ToInt16(!Convert.ToBoolean(participation.IsApproved));
+
+            _context.Update(participation);
+            await _context.SaveChangesAsync();
+
+
+
+            return RedirectToAction("Details", new { id = eventId });
+        }
+
     }
 }
