@@ -1,4 +1,5 @@
-﻿using System;
+﻿using planinarskoUdruzenjeV3.Areas.Identity.Data;
+using System;
 using System.Collections.Generic;
 
 namespace planinarskoUdruzenjeV3.Models

@@ -61,6 +61,14 @@ namespace planinarskoUdruzenjeV3.Controllers
                 return NotFound();
             }
 
+            var createdByUserName = await _context.Users
+                .Where(x => x.Id == @event.CreatedBy)
+                .FirstOrDefaultAsync();
+
+            ViewBag.CreatedBy = createdByUserName != null ?
+                createdByUserName.FirstName + " " + createdByUserName.LastName :
+                "Nepoznato";
+
             ViewBag.isApproved = IsRegistered(id);
             ViewBag.Participants = GetParticipants(id);
             return View(@event);
@@ -81,6 +89,7 @@ namespace planinarskoUdruzenjeV3.Controllers
         {
             if (ModelState.IsValid)
             {
+                @event.CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Event.Add(@event);
                 //add files
                 foreach (var formFile in files)
@@ -103,6 +112,7 @@ namespace planinarskoUdruzenjeV3.Controllers
                     }
 
                 }
+
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));

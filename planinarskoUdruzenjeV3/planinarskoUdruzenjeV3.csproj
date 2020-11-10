@@ -7,6 +7,12 @@
   <ItemGroup>
     <Compile Remove="Migrations\20201024213706_IdentityTables.cs" />
     <Compile Remove="Migrations\20201024213706_IdentityTables.Designer.cs" />
+    <Compile Remove="Migrations\20201110184517_rate-userI-key.cs" />
+    <Compile Remove="Migrations\20201110184517_rate-userI-key.Designer.cs" />
+    <Compile Remove="Migrations\20201110184716_rate-user-key.cs" />
+    <Compile Remove="Migrations\20201110184716_rate-user-key.Designer.cs" />
+    <Compile Remove="Migrations\20201110185246_update_participation_rate.cs" />
+    <Compile Remove="Migrations\20201110185246_update_participation_rate.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\lib\dropzone\" />
   </ItemGroup>
 

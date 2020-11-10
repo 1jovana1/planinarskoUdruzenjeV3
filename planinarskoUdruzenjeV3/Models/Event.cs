@@ -20,7 +20,7 @@ namespace planinarskoUdruzenjeV3.Models
         public int? MaxParticipanst { get; set; }
         public string Location { get; set; }
         public double? Price { get; set; }
-        public int CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public ICollection<File> File { get; set; }

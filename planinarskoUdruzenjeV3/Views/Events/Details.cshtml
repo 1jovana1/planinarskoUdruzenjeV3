@@ -51,7 +51,7 @@
             Kreirao
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.CreatedBy)
+            @ViewBag.CreatedBy
         </dd>
         <dt class="col-sm-3">
             Datum i vrijeme kreiranja
@@ -97,17 +97,26 @@
     }
     else if (ViewBag.isApproved == Participation.NOT_APPROVED)
     {
-        <p>Niste jos uvije prihvaceni</p>
+        <div class="alert alert-info alert-dismissible fade show">
+            <strong>Info!</strong> Vaša prijava za učestvovanje na ovoj planinarskoj akciji još uvijek nije prihvaćena.
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+
+        
     }
     else if (ViewBag.isApproved == Participation.APPROVED)
     {
-        <p>Jeee ucsetvujete</p>
+        
+<div class="alert alert-info alert-dismissible fade show">
+    <strong>Info!</strong> Vaša prijava za učestvovanje na ovoj planinarskoj akciji je prihvaćena.
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
     }
 
 
     <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Izbriši</a>
     <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-        Button with data-target
+        Pregled učesnika
     </button>
 
     <div class="collapse" id="collapseExample">
