@@ -1,152 +1,210 @@
 ﻿@model planinarskoUdruzenjeV3.Models.Event
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Planinarske akcije";
 }
 
-<h1>Detalji</h1>
+@if (ViewBag.isApproved == Participation.NOT_APPROVED)
+{
+    <div class="alert alert-info alert-dismissible fade show">
+        <strong>!</strong> Vaša prijava za učestvovanje na ovoj planinarskoj akciji još uvijek nije prihvaćena.
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+}
+else if (ViewBag.isApproved == Participation.APPROVED)
+{
 
-<div>
-    <dl class="row details">
-        <dt class="col-sm-12">
-            <h2>@Html.DisplayFor(model => model.Title)</h2>
-        </dt>
-        <dt class="col-sm-3">
-            Opis
-        </dt>
-        <dd class="col-sm-9">
-            @Html.Raw(Model.Description)
-        </dd>
-        <dt class="col-sm-3">
-            Datum održavanja
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-        <dt class="col-sm-3">
-            Rok za prijavu
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Deadline)
-        </dd>
-        <dt class="col-sm-3">
-            Maksimalan broj učesnika
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.MaxParticipanst)
-        </dd>
-        <dt class="col-sm-3">
-            Lokacija
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Location)
-        </dd>
-        <dt class="col-sm-3">
-            Cijena
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class="col-sm-3">
-            Kreirao
-        </dt>
-        <dd class="col-sm-9">
-            @ViewBag.CreatedBy
-        </dd>
-        <dt class="col-sm-3">
-            Datum i vrijeme kreiranja
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
+    <div class="alert alert-info alert-dismissible fade show">
+        <strong>!</strong> Vaša prijava za učestvovanje na ovoj planinarskoj akciji je prihvaćena.
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+}
 
-        <dd class="col-sm-12">
-            @foreach (var item in Model.File)
-            {
-                @if (!item.IsImage())
-                {
-                    <a class="mr-3" href="~/File?id=@item.Id">@item.FileName</a>
-                }
-            }
 
-        </dd>
-        <div class="row">
-            @foreach (var item in Model.File)
-            {
-                @if (item.IsImage())
-                {
-                    <div class="col-md-4 col-sm-6">
-                        <a target="_blank" href="~/File?id=@item.Id">
-                            <img src="~/File?id=@item.Id" class="w-100" style="height:250px">
-                        </a>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-transparent">
+            <div class="card-header">
+                <div class="card-text float-right">
+                    <div class="card-title">
+                        @if (User.IsInRole("administrator"))
+                        {
+                            <a class="btn btn-dark text-white" data-toggle="modal" data-target="#staticBackdrop">
+                                <i class="fas fa-users mr-2"></i>Pregled učesnika
+                            </a>
+                        }
+                        @if (User.IsInRole("korisnik") || User.IsInRole("administrator"))
+                        {
+                            @if (ViewBag.isApproved == Participation.NOT_EXIST && Model.Deadline > DateTime.Now)
+                            {
+                                  <a class="btn btn-success" asp-action="Participate" asp-route-id="@Model.Id">
+                                    <i class="fas fa-check-circle mr-2"></i>Prijavi se
+                                     </a>
+                            }
+                        }
+                            @if (User.IsInRole("administrator"))
+                            {
+                                <a class="btn btn-info" asp-action="Edit" asp-route-id="@Model.Id">
+                                    <i class="far fa-edit mr-2"></i>Izmijeni
+                                </a>
+                                <a type="button" class="btn btn-danger text-white" data-toggle="modal" data-target="#brisanjePotvrda">
+                                    <i class="fas fa-trash-alt mr-2"></i>Izbriši
+                                </a>
+                            }
+
+
+                        </div>
+                </div>
+                <h2 class="card-title">
+                    <i class="fas fa-mountain mr-4"></i>@Html.DisplayFor(model => model.Title)
+                </h2>
+            </div>
+            <div class="card-body details">
+                <div class="row">
+
+                    <div class="col-sm-1">
+                        <h6>Autor:</h6>
                     </div>
-                }
-            }
-        </div>
-        <dt class="col-sm-3">
-            <div>
-                <a asp-action="Edit" asp-route-id="@Model.Id">Izmijeni</a> |
+                    <div class="col-sm-8">
+                        <h6>@ViewBag.CreatedBy</h6>
+                    </div>
+                    <div class="col-sm-3">
+                        <h6 class="font-italic">@Html.DisplayFor(model => model.CreatedAt)</h6>
+                    </div>
+                    <div class="col-sm-3  mt-3">
+                        <p><i class="far fa-calendar-check mr-2"></i> Datum održavanja:</p>
+                    </div>
+                    <div class="col-sm-9 mt-3">
+                        <p>@Html.DisplayFor(model => model.Date)</p>
+                    </div>
+                    <div class="col-sm-3">
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Lokacija:</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p>@Html.DisplayFor(model => model.Location)</p>
+                    </div>
+                    <div class="col-sm-3">
+                        <p><i class="fas fa-coins mr-2"></i>Cijena</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p> @Html.DisplayFor(model => model.Price)</p>
+                    </div>
+                    <div class="col-sm-3">
+                        <p><i class="fas fa-user-friends mr-2"></i> Maksimalan broj učesnika</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p>@Html.DisplayFor(model => model.MaxParticipanst)</p>
+                    </div>
+                    <div class="col-sm-3">
+                        <p><i class="far fa-calendar-times mr-2"></i>Rok za prijavu</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p>@Html.DisplayFor(model => model.Deadline)</p>
+                    </div>
+                    <div class="col-sm-12">
+                        <p> @Html.Raw(Model.Description)</p>
+                    </div>
+
+
+                    <div class="col-sm-12">
+                        @foreach (var item in Model.File)
+                        {
+                            @if (!item.IsImage())
+                            {
+                                <a class="mr-3" href="~/File?id=@item.Id">@item.FileName</a>
+                            }
+                        }
+
+                    </div>
+                    <div class="row">
+                        @foreach (var item in Model.File)
+                        {
+                            @if (item.IsImage())
+                            {
+                                <div class="col-md-4 col-sm-6">
+                                    <a target="_blank" href="~/File?id=@item.Id">
+                                        <img src="~/File?id=@item.Id" class="w-100" style="height:250px">
+                                    </a>
+                                </div>
+                            }
+                        }
+                    </div>
+
+
+                </div>
                 <a asp-action="Index">Nazad</a>
             </div>
-        </dt>
 
-    </dl>
-    @if (ViewBag.isApproved == Participation.NOT_EXIST)
-    {
-        <a class="btn btn-dark dugme" asp-action="Participate" asp-route-id="@Model.Id">Prijavi se</a>
-    }
-    else if (ViewBag.isApproved == Participation.NOT_APPROVED)
-    {
-        <div class="alert alert-info alert-dismissible fade show">
-            <strong>Info!</strong> Vaša prijava za učestvovanje na ovoj planinarskoj akciji još uvijek nije prihvaćena.
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
-
-        
-    }
-    else if (ViewBag.isApproved == Participation.APPROVED)
-    {
-        
-<div class="alert alert-info alert-dismissible fade show">
-    <strong>Info!</strong> Vaša prijava za učestvovanje na ovoj planinarskoj akciji je prihvaćena.
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-</div>
-    }
-
-
-    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Izbriši</a>
-    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-        Pregled učesnika
-    </button>
-
-    <div class="collapse" id="collapseExample">
-        <table class="table table-info">
-            <thead>
-                <tr>
-                    <th>Ime i prezime</th>
-                    <th>Odobren</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @foreach (var participant in ViewBag.Participants)
-                {
-                    <tr>
-                        <td>@participant.Name</td>
-                        <td>
-                            <form asp-action="Activate">
-                                <input type="hidden" value="@Model.Id" name="eventId" />
-                                <input type="hidden" value="@participant.UserId" name="userId" />
-                                <input class="form-check-input" name="isApproved"
-                                       type="checkbox" @(participant.isApproved ? "checked" : "")
-                                       onChange="this.form.submit()">
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
     </div>
+</div>
+@* Modal-potvrda za brisanje *@
+<div class="modal fade" id="brisanjePotvrda" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Da li ste sigurni da želite izbrisati ovu planinarsku akciju?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Odustani</button>
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="@Model.Id" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@* Modal-ucesnici na akciji *@
+<div class="modal  fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Pregled učesnika</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-info">
+                    <thead>
+                        <tr>
+                            <th>Ime i prezime</th>
+                            <th>Odobren</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
+                        @foreach (var participant in ViewBag.Participants)
+                        {
+                            <tr>
+                                <td>@participant.Name</td>
+                                <td>
+                                    <form asp-action="Activate">
+                                        <input type="hidden" value="@Model.Id" name="eventId" />
+                                        <input type="hidden" value="@participant.UserId" name="userId" />
+                                        <input class="form-check-input" name="isApproved"
+                                               type="checkbox" @(participant.isApproved ? "checked" : "")
+                                               onChange="this.form.submit()">
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                
+            </div>
+        </div>
+    </div>
 </div>

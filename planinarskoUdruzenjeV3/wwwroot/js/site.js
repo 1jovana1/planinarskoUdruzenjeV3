@@ -4,7 +4,7 @@
 // Write your JavaScript code.
 
 function ajaxSubmit(e) {
-    console.log("Cao Jole");
+    console.log("Cao");
     $.ajax({
         url: $(this).data("url"),
         method: "POST", // use "GET" if server does not handle DELETE
@@ -23,3 +23,9 @@ $(window).on("resize", function () {
     $(".jumbotron").css({ height: $(window).height() + "px" });
 });
 
+$(document).ready(function () {
+    $('#dtBasicExample').DataTable({
+        "pagingType": "numbers" 
+    });
+    $('.dataTables_length').addClass('bs-select');
+});

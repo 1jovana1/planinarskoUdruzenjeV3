@@ -197,6 +197,11 @@ namespace planinarskoUdruzenjeV3.Controllers
             //Delete foreign key
             var files =  _context.File.Where(x => x.EventId == id);
             _context.File.RemoveRange(files);
+
+            var participations = _context.Participation
+                .Where(x => x.EventId == id);
+            _context.Participation.RemoveRange(participations);
+
             //Delete event
             var @event = await _context.Event.FindAsync(id);
             _context.Event.Remove(@event);

@@ -42,7 +42,7 @@ namespace planinarskoUdruzenjeV3.Areas.Identity.Pages.Account.Manage
             public string LastName { get; set; } 
             
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Broj telefona")]
             public string PhoneNumber { get; set; }
         }
 
@@ -93,7 +93,7 @@ namespace planinarskoUdruzenjeV3.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    StatusMessage = "Greška";
                     return RedirectToPage();
                 }
             }
@@ -117,7 +117,7 @@ namespace planinarskoUdruzenjeV3.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Promjene su sačuvane";
             return RedirectToPage();
         }
     }

@@ -158,6 +158,7 @@ namespace planinarskoUdruzenjeV3.Models
                     .HasForeignKey(d => d.EventId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_participation_event");
+
             });
 
             modelBuilder.Entity<Rate>(entity =>

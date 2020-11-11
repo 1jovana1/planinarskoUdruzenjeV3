@@ -12,10 +12,13 @@
         <div class="card bg-transparent">
             <div class="card-header">
                 <div class="card-text float-right">
-                    <div class="card-title">
-                        <a class="btn btn-info" asp-action="Create"><i class="fas fa-plus mr-2"></i>Dodaj novu</a>
+                    @if (User.IsInRole("administrator"))
+                    {
+                        <div class="card-title">
+                            <a class="btn btn-info" asp-action="Create"><i class="fas fa-plus mr-2"></i>Dodaj novu</a>
+                        </div>
+                    }
                     </div>
-                </div>
                 <h2 class="card-title">
                     <i class="fas fa-mountain mr-4"></i> Planinarske akcije
                 </h2>
@@ -31,14 +34,17 @@
                                 </a>
                                 <div class="card-body">
                                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
-                                    <div>
-                                        <a class="btn btn-primary dugme" asp-action="Details" asp-route-id="@item.Id">Opširno</a>
-                                    </div>
-                                    <div>
-                                        <a class="btn btn-danger dugme" asp-action="Delete" asp-route-id="@item.Id">Izbriši</a>
-                                        <a class="btn btn-info dugme" asp-action="Edit" asp-route-id="@item.Id">Uredi</a>
-                                    </div>
+                                    <h6 class="card-text"><i class="far fa-calendar-check mr-2"></i>@Html.DisplayFor(modelItem => item.Date)</h6>
+                                    <h6 class="card-text"><i class="fas fa-map-marker-alt mr-2"></i>@Html.DisplayFor(modelItem => item.Location)</h6>
+                                    @*<div>
+        <a class="btn btn-primary dugme" asp-action="Details" asp-route-id="@item.Id">Opširno</a>
+         </div>*@
+                                    @*<div>
+             <a class="btn btn-danger dugme" asp-action="Delete" asp-route-id="@item.Id">Izbriši</a>
+               <a class="btn btn-info dugme" asp-action="Edit" asp-route-id="@item.Id">Uredi</a>
+        </div>*@
                                 </div>
+                          
                             </div>
                         </div>
                     }

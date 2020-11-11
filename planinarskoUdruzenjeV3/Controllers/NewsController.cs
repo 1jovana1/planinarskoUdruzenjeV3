@@ -58,7 +58,7 @@ namespace planinarskoUdruzenjeV3.Controllers
         }
 
         // GET: News/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
@@ -70,6 +70,13 @@ namespace planinarskoUdruzenjeV3.Controllers
             {
                 return NotFound();
             }
+            var createdByUserName = await _context.Users
+                 .Where(x => x.Id ==(news.CreatedBy).ToString())
+                 .FirstOrDefaultAsync();
+
+            ViewBag.CreatedBy = createdByUserName != null ?
+                createdByUserName.FirstName + " " + createdByUserName.LastName :
+                "Nepoznato";
 
             return View(news);
         }
