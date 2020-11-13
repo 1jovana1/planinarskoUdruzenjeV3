@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.EventLog;
+using Newtonsoft.Json.Linq;
 using planinarskoUdruzenjeV3.Areas.Identity.Data;
 using planinarskoUdruzenjeV3.Models;
 
@@ -43,7 +44,8 @@ namespace planinarskoUdruzenjeV3.Controllers
         public async Task<IActionResult> Index(int p=1)
         {
             int pageSize = 8;
-            var events = _context.Event.Skip((p - 1) * pageSize).Take(pageSize);
+            var events = _context.Event.Skip((p - 1) * pageSize).Take(pageSize)
+                .OrderByDescending(e => e.Id);
 
             ViewBag.PageNumber = p;
             ViewBag.PageRange = pageSize;
@@ -71,6 +73,15 @@ namespace planinarskoUdruzenjeV3.Controllers
 
             ViewBag.isApproved = IsRegistered(id);
             ViewBag.Participants = GetParticipants(id);
+            var listOfComments = GetComments(id);
+            ViewBag.Comments = listOfComments;
+            //ukupna ocjena na dogadjaju
+            var average = 0; 
+            foreach(var comment in listOfComments)
+            {
+                average += comment.Stars;
+            }
+            ViewBag.Average = (float)average / (float)listOfComments.Count;
             return View(@event);
         }
 
@@ -293,6 +304,19 @@ namespace planinarskoUdruzenjeV3.Controllers
             return participants;
         }
 
+
+        private IList<Rate> GetComments(int eventId)
+        {
+
+            var rate =  _context.Rate
+                .Where(r => r.EventId == eventId)
+                .Include(r => r.Event)
+                .Include(r => r.User)
+                .ToList();
+
+
+            return rate;
+        }
         public async Task<IActionResult> Activate(string userId, int eventId)
         {
             var participation = await _context.Participation
@@ -313,6 +337,59 @@ namespace planinarskoUdruzenjeV3.Controllers
 
             return RedirectToAction("Details", new { id = eventId });
         }
+        //komentari i ocjene
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Rating(int eventId, int stars, string comment)
+        {
+            //Da li event postoji
+            var @event = await _context.Event.Where(e => e.Id == eventId).FirstOrDefaultAsync();
+            if (@event == null)
+            {
+                return NotFound();
+            }
+
+
+            //KO je user
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //da li je ucestvoao
+            var participation = await _context.Participation
+                .Where(x => x.EventId == eventId && x.UserId == userId && x.IsApproved == Participation.APPROVED)
+                .FirstOrDefaultAsync();
+
+            if (participation == null)
+            {
+                return NotFound();
+            }
+
+          
+            //Da li je user vec komentarisao
+            var isCommmented = await _context.Rate
+                .Where(x => x.EventId == eventId && x.UserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (isCommmented != null)
+            {
+                //Vec ste komentarisali
+                return NotFound();
+            }
+
+
+            var rate = new Rate()
+            {
+                EventId = eventId,
+                UserId = userId,
+                Comment = comment,
+                Stars = stars
+            };
+
+             _context.Rate.Add(rate);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = eventId });
+        }
+
 
     }
 }

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<planinarskoUdruzenjeV3.Models.Rate>
+
+
+
+<h1>Comments</h1>
+
+
+@foreach (var rate in Model)
+{
+    <div class="card">
+        <div class="row d-flex">
+            <div class="d-flex flex-column">
+                <h3 class="mt-2 mb-0">@rate.User.FirstName @rate.User.LastName</h3>
+                <div>
+                    <p class="text-left"><span class="text-muted">@rate.Stars</span> <span class="fa fa-star star-active ml-3"></span> <span class="fa fa-star star-active"></span> <span class="fa fa-star star-active"></span> <span class="fa fa-star star-active"></span> <span class="fa fa-star star-inactive"></span></p>
+                </div>
+            </div>
+            <div class="ml-auto">
+                <p class="text-muted pt-5 pt-sm-3">@rate.CreatedAt</p>
+            </div>
+        </div>
+        <div class="row text-left">
+            <h4 class="blue-text mt-3">"@rate.Event.Title"</h4>
+            <p class="content">@rate.Comment</p>
+        </div>
+    </div>
+
+}
+

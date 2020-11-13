@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -155,5 +156,21 @@ namespace planinarskoUdruzenjeV3.Controllers
         {
             return _context.Rate.Any(e => e.Id == id);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Comments(int eventId)
+        {
+
+            var rate = await _context.Rate
+                .Where(r => r.EventId == eventId)
+                .Include(r => r.Event)
+                .Include(r => r.User)
+                .ToListAsync();
+
+
+            return PartialView(rate);
+        }
+
+
     }
 }

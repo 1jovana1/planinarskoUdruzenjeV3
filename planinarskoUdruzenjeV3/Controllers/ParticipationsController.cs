@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using planinarskoUdruzenjeV3.Areas.Identity.Data;
 using planinarskoUdruzenjeV3.Models;
 
 namespace planinarskoUdruzenjeV3.Controllers
@@ -13,9 +16,12 @@ namespace planinarskoUdruzenjeV3.Controllers
     {
         private readonly PlaninarskoUdruzenjeContext _context;
 
-        public ParticipationsController(PlaninarskoUdruzenjeContext context)
+        private readonly UserManager<User> _userManager;
+
+        public ParticipationsController(PlaninarskoUdruzenjeContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Participations
@@ -157,5 +163,21 @@ namespace planinarskoUdruzenjeV3.Controllers
         {
             return _context.Participation.Any(e => e.Id == id);
         }
+
+
+        public async Task<IActionResult> MyParticipations()
+        {
+            
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var participations = await _context.Participation
+                .Where(x => x.UserId == userId)
+                .Include(u => u.User)
+                .Include(p => p.Event)
+                .ToListAsync();
+
+            return View(participations);
+        }
+
     }
 }

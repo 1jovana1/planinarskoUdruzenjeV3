@@ -10,11 +10,6 @@ namespace planinarskoUdruzenjeV3.Controllers
     public class RoleController : Controller
     {
         RoleManager<IdentityRole> roleManager;
-
-        /// 
-        /// Injecting Role Manager
-        /// 
-        /// 
         public RoleController(RoleManager<IdentityRole> roleManager)
         {
             this.roleManager = roleManager;

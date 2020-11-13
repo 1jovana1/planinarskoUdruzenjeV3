@@ -38,31 +38,30 @@ else if (ViewBag.isApproved == Participation.APPROVED)
                         {
                             @if (ViewBag.isApproved == Participation.NOT_EXIST && Model.Deadline > DateTime.Now)
                             {
-                                  <a class="btn btn-success" asp-action="Participate" asp-route-id="@Model.Id">
+                                <a class="btn btn-success" asp-action="Participate" asp-route-id="@Model.Id">
                                     <i class="fas fa-check-circle mr-2"></i>Prijavi se
-                                     </a>
+                                </a>
                             }
                         }
-                            @if (User.IsInRole("administrator"))
-                            {
-                                <a class="btn btn-info" asp-action="Edit" asp-route-id="@Model.Id">
-                                    <i class="far fa-edit mr-2"></i>Izmijeni
-                                </a>
-                                <a type="button" class="btn btn-danger text-white" data-toggle="modal" data-target="#brisanjePotvrda">
-                                    <i class="fas fa-trash-alt mr-2"></i>Izbriši
-                                </a>
-                            }
+                        @if (User.IsInRole("administrator"))
+                        {
+                            <a class="btn btn-info" asp-action="Edit" asp-route-id="@Model.Id">
+                                <i class="far fa-edit mr-2"></i>Izmijeni
+                            </a>
+                            <button type="button" class="btn btn-danger text-white" data-toggle="modal" data-target="#brisanjePotvrda">
+                                <i class="fas fa-trash-alt mr-2"></i>Izbriši
+                            </button>
+                        }
 
 
-                        </div>
+                    </div>
                 </div>
                 <h2 class="card-title">
                     <i class="fas fa-mountain mr-4"></i>@Html.DisplayFor(model => model.Title)
                 </h2>
             </div>
-            <div class="card-body details">
+            <div class="card-body pozadina">
                 <div class="row">
-
                     <div class="col-sm-1">
                         <h6>Autor:</h6>
                     </div>
@@ -139,72 +138,184 @@ else if (ViewBag.isApproved == Participation.APPROVED)
         </div>
     </div>
 </div>
-@* Modal-potvrda za brisanje *@
-<div class="modal fade" id="brisanjePotvrda" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Da li ste sigurni da želite izbrisati ovu planinarsku akciju?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Odustani</button>
-                <form asp-action="Delete">
-                    <input type="hidden" asp-for="@Model.Id" />
-                    <input type="submit" value="Delete" class="btn btn-danger" />
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-@* Modal-ucesnici na akciji *@
-<div class="modal  fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Pregled učesnika</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-info">
-                    <thead>
-                        <tr>
-                            <th>Ime i prezime</th>
-                            <th>Odobren</th>
-                        </tr>
-                    </thead>
-                    <tbody>
 
-                        @foreach (var participant in ViewBag.Participants)
-                        {
-                            <tr>
-                                <td>@participant.Name</td>
-                                <td>
-                                    <form asp-action="Activate">
-                                        <input type="hidden" value="@Model.Id" name="eventId" />
-                                        <input type="hidden" value="@participant.UserId" name="userId" />
-                                        <input class="form-check-input" name="isApproved"
-                                               type="checkbox" @(participant.isApproved ? "checked" : "")
-                                               onChange="this.form.submit()">
-                                    </form>
-                                </td>
-                            </tr>
+@* komentari i ocjene *@
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card bg-transparent">
+                <div class="card-header">
+                    <div class="card-text float-right">
+                        <div class="card-title">
+                            @if (DateTime.Now > Model.Date)
+                            {
+                                <div class="col-sm-12">
+                                    <h3 class="float-right"><i class="fas fa-star mr-2"></i>@ViewBag.Average</h3>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                    <h4 class="card-title">
+                        <i class="ml-2 fas  fa-comments mr-4"></i>Ocjene i komentari
+                    </h4>
+                </div>
+                <div class="card-body pozadina scrollable">
+                    @if (User.IsInRole("korisnik") || User.IsInRole("administrator"))
+                    {
+                       @if((DateTime.Now > Model.Date) && DateTime.Now <= Model.Date.AddDays(10)){
+                         <div class="col-sm-12">
+                             <form asp-action="Rating" class="col-sm-8">
+                                <div class="form-group row">
+                                    <input name="eventId" type="hidden" value="@Model.Id" />
+                                    <input type="hidden" id="selected_rating" name="stars" value="" required="required">
+                                    <div class="col-sm-5">
+                                        <button type="button" class="btnrating btn btn-default btn-md" data-attr="1" id="rating-star-1">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btnrating btn btn-default btn-md" data-attr="2" id="rating-star-2">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btnrating btn btn-default btn-md" data-attr="3" id="rating-star-3">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btnrating btn btn-default btn-md" data-attr="4" id="rating-star-4">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btnrating btn btn-default btn-md" data-attr="5" id="rating-star-5">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <h2 class="bold rating-header" style="">
+                                            <span class="selected-rating">0</span><small> / 5</small>
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-9">
+                                        <textarea name="comment" rows="4" style="resize:none" cols="70"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-3 mb-4 mt-auto">
+                                        <button type="submit" class="btn-success btn-md">Ocijeni</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                         }
-                    </tbody>
-                </table>
+                    }
+
+                        @*ostali komentari*@
+                    <div class="col-sm-12 ml-5">
+                        <div class="row">
+                            @foreach (var rate in ViewBag.Comments)
+                            {
+
+                                <div class="card bg-transparent col-sm-11">
+                                    <div class="d-flex">
+                                        <div class="d-flex flex-column">
+                                            <h3 class="mt-2 mb-0">@rate.User.FirstName @rate.User.LastName</h3>
+                                            <div>
+                                                <p class="text-left">
+                                                    <span class="text-muted">@rate.Stars</span>
+                                                    @for (int i = 0; i < rate.Stars; i++)
+                                                    {
+                                                        <span class="fa fa-star star-active"></span>
+                                                    }
+                                                    @for (int j = rate.Stars; j < 5; j++)
+                                                    {
+                                                        <span class="fa fa-star"></span>
+                                                    }
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <p class="text-muted pt-5 pt-sm-3">@rate.CreatedAt</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-left">
+                                        <p class="content">@rate.Comment</p>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
 
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-                
+
+        </div>
+    </div>
+    @* Modal-potvrda za brisanje *@
+    <div class="modal fade" id="brisanjePotvrda" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Da li ste sigurni da želite izbrisati ovu planinarsku akciju?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Odustani</button>
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="@Model.Id" />
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    @* Modal-ucesnici na akciji *@
+    <div class="modal  fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Pregled učesnika</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-info">
+                        <thead>
+                            <tr>
+                                <th>Ime i prezime</th>
+                                <th>Odobren</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var participant in ViewBag.Participants)
+                            {
+                                <tr>
+                                    <td>@participant.Name</td>
+                                    <td>
+                                        <form asp-action="Activate">
+                                            <input type="hidden" value="@Model.Id" name="eventId" />
+                                            <input type="hidden" value="@participant.UserId" name="userId" />
+                                            <input class="form-check-input" name="isApproved"
+                                                   type="checkbox" @(participant.isApproved ? "checked" : "")
+                                                   onChange="this.form.submit()">
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+

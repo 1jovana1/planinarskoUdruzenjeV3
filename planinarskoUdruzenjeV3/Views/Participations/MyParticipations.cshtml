@@ -1,0 +1,12 @@
+﻿
+
+@model List<Participation>
+@{
+    ViewData["Title"] = "Korisnički nalozi";
+}
+
+
+@foreach (var participation in Model)
+{
+<a>@participation.Event.Title</a>
+}

@@ -178,7 +178,7 @@ namespace planinarskoUdruzenjeV3.Models
 
                 entity.Property(e => e.EventId).HasColumnName("event_id");
 
-                entity.Property(e => e.Rate1).HasColumnName("rate");
+                entity.Property(e => e.Stars).HasColumnName("stars");
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
 

@@ -103,22 +103,15 @@ body {
     width:95px;
     margin:2px;
 }
-.jumbotron {
-    color: white;
-    background-image: url("../images/arthur-poulin-NhU0nUR7920-unsplash.jpg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100vh;
-}
+
 .carousel-item {
     height: calc(100vh - 50px);
     min-height: 350px;
     background: no-repeat center center scroll;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+   /* -webkit-background-size: cover;
+    -moz-background-size: cover;*/
+    /*-o-background-size: cover;*/
+   /* background-size: cover;*/
 }
 
 
@@ -213,4 +206,24 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+.star-active {
+  color: green;
+}
+
+
+.scrollable {
+    height: auto;
+    max-height: 400px;
+    overflow-x: hidden;
+}
+.scrollableTable {
+    height: auto;
+    max-height: 700px;
+    overflow-x: hidden;
+}
+.pozadina {
+    background: rgba(255, 255, 255, 0.7);
+    font-weight: bold;
 }
