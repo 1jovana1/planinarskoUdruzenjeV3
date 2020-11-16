@@ -2,11 +2,22 @@
 
 @model List<Participation>
 @{
-    ViewData["Title"] = "Korisnički nalozi";
+    ViewData["Title"] = "Planinarske akcije";
 }
 
+<h2>Prijavljeni ste na sljedeće planinarske akcije: </h2>
 
-@foreach (var participation in Model)
+
+<div class="list-group">
+    @foreach (var participation in Model)
+    {
+       // <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
+        <a asp-controller="Events" asp-action="Details" asp-route-id="@participation.EventId" class="list-group-item list-group-item-action">@participation.Event.Title</a>
+
+    }
+</div>
+
+@*@foreach (var participation in Model)
 {
 <a>@participation.Event.Title</a>
-}
+}*@

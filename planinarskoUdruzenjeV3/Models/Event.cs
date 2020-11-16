@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace planinarskoUdruzenjeV3.Models
 {
@@ -19,6 +20,9 @@ namespace planinarskoUdruzenjeV3.Models
         public DateTime Deadline { get; set; }
         public int? MaxParticipanst { get; set; }
         public string Location { get; set; }
+
+        //  [DataType(DataType.Custom, ErrorMessage = "Unesite brojnu vrijednost")]
+        [RegularExpression(@"[0-9]*$", ErrorMessage = "Unesite brojnu vrijednost")]
         public double? Price { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }

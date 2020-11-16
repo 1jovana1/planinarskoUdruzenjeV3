@@ -73,15 +73,16 @@ namespace planinarskoUdruzenjeV3.Controllers
 
             ViewBag.isApproved = IsRegistered(id);
             ViewBag.Participants = GetParticipants(id);
+            //komentari
             var listOfComments = GetComments(id);
             ViewBag.Comments = listOfComments;
             //ukupna ocjena na dogadjaju
-            var average = 0; 
+            var average = 0;
             foreach(var comment in listOfComments)
             {
                 average += comment.Stars;
             }
-            ViewBag.Average = (float)average / (float)listOfComments.Count;
+            ViewBag.Average = average == 0 ? 0 : average / (float)listOfComments.Count;
             return View(@event);
         }
 
@@ -259,7 +260,9 @@ namespace planinarskoUdruzenjeV3.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+             return RedirectToAction(nameof(Index));
+
+         
         }
 
         private int IsRegistered(int id)
@@ -371,7 +374,6 @@ namespace planinarskoUdruzenjeV3.Controllers
 
             if (isCommmented != null)
             {
-                //Vec ste komentarisali
                 return NotFound();
             }
 

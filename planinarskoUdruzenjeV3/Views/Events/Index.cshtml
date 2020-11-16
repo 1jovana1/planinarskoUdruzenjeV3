@@ -12,13 +12,14 @@
         <div class="card bg-transparent">
             <div class="card-header">
                 <div class="card-text float-right">
+                   
                     @if (User.IsInRole("administrator"))
                     {
                         <div class="card-title">
                             <a class="btn btn-info" asp-action="Create"><i class="fas fa-plus mr-2"></i>Dodaj novu</a>
                         </div>
                     }
-                    </div>
+                </div>
                 <h2 class="card-title">
                     <i class="fas fa-mountain mr-4"></i> Planinarske akcije
                 </h2>

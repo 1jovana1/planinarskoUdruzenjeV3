@@ -26,9 +26,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Početna</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Index">Planinarske akcije</a>
-                        </li>
+                        @if (User.IsInRole("administrator") || User.IsInRole("korisnik"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link text-dark dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Planinarske akcije</a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Events" asp-action="Index">Pregled akcija</a>
+                                   
+                                   <a class="dropdown-item" asp-area="" asp-controller="Participations" asp-action="MyParticipations">Moje akcije</a>
+                                   
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Index">Planinarske akcije</a>
+                            </li>
+                        }
                         <li class="nav-item dropdown">
                             <a class="nav-link text-dark dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Obavještenja</a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -43,12 +58,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">O nama</a>
                         </li>
-                        @if(User.IsInRole("administrator"))
-                           {
-                             <li class="nav-item">
+                        @if (User.IsInRole("administrator"))
+                        {
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Korisnički nalozi</a>
-                             </li>
-                            }
+                            </li>
+                        }
                         <partial name="_LoginPartial.cshtml" />
 
 
