@@ -36,12 +36,12 @@ $(".btnrating").on('click', (function (e) {
 	$(".selected-rating").html(selected_value);
 
 	for (i = 1; i <= selected_value; ++i) {
-		$("#rating-star-" + i).toggleClass('btn-warning');
+		$("#rating-star-" + i).toggleClass('btn-success');
 		$("#rating-star-" + i).toggleClass('btn-default');
 	}
 
 	for (ix = 1; ix <= previous_value; ++ix) {
-		$("#rating-star-" + ix).toggleClass('btn-warning');
+		$("#rating-star-" + ix).toggleClass('btn-success');
 		$("#rating-star-" + ix).toggleClass('btn-default');
 	}
 

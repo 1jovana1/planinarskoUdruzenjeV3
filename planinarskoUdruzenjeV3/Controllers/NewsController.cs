@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -56,7 +57,7 @@ namespace planinarskoUdruzenjeV3.Controllers
 
 
         }
-
+       
         // GET: News/Details/5
         public async Task<IActionResult> Details(int id)
         {
@@ -80,16 +81,14 @@ namespace planinarskoUdruzenjeV3.Controllers
 
             return View(news);
         }
-
+        [Authorize(Roles = "administrator")]
         // GET: News/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: News/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,Category,CreatedBy,CreatedAt")] News @news, List<IFormFile> files)
@@ -125,6 +124,7 @@ namespace planinarskoUdruzenjeV3.Controllers
         }
 
         // GET: News/Edit/5
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -141,8 +141,7 @@ namespace planinarskoUdruzenjeV3.Controllers
         }
 
         // POST: News/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Category,CreatedBy,CreatedAt")] News news)
@@ -176,6 +175,7 @@ namespace planinarskoUdruzenjeV3.Controllers
         }
 
         // GET: News/Delete/5
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -194,6 +194,7 @@ namespace planinarskoUdruzenjeV3.Controllers
         }
 
         // POST: News/Delete/5
+        [Authorize(Roles = "administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -6,6 +6,7 @@ using System.Net.Mime;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
@@ -41,11 +42,14 @@ namespace planinarskoUdruzenjeV3.Controllers
             return File(fileToRetrieve.Content, fileToRetrieve.ContentType);
         }
         // GET: Events
+       
         public async Task<IActionResult> Index(int p=1)
         {
             int pageSize = 8;
-            var events = _context.Event.Skip((p - 1) * pageSize).Take(pageSize)
-                .OrderByDescending(e => e.Id);
+            var events = _context.Event
+                .OrderByDescending(e => e.Id)
+                .Skip((p - 1) * pageSize).Take(pageSize);
+
 
             ViewBag.PageNumber = p;
             ViewBag.PageRange = pageSize;
@@ -87,14 +91,14 @@ namespace planinarskoUdruzenjeV3.Controllers
         }
 
         // GET: Events/Create
+        [Authorize(Roles ="administrator")]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Events/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,Description,Date,Deadline,MaxParticipanst,Location,Price")] Event @event, List<IFormFile> files)
@@ -131,7 +135,7 @@ namespace planinarskoUdruzenjeV3.Controllers
             }
             return View(@event);
         }
-
+        [Authorize(Roles = "administrator")]
         // GET: Events/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -149,40 +153,38 @@ namespace planinarskoUdruzenjeV3.Controllers
         }
 
         // POST: Events/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Date,Deadline,MaxParticipanst,Location,Price,CreatedBy,CreatedAt")] Event @event)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Date,Deadline,MaxParticipanst,Location,Price")] Event @event)
         {
-            if (id != @event.Id)
+            var _event = await _context.Event.FindAsync(id);
+            if (_event == null)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(@event);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EventExists(@event.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _event.Title = @event.Title;
+                _event.Description = @event.Description;
+                _event.Date = @event.Date;
+                _event.Deadline = @event.Deadline;
+                _event.MaxParticipanst = @event.MaxParticipanst;
+                _event.Location = @event.Location;
+                _event.Price = @event.Price;
+
+                _context.Update(_event);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(@event);
         }
 
+
+        [Authorize(Roles = "administrator")]
         // GET: Events/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -200,7 +202,7 @@ namespace planinarskoUdruzenjeV3.Controllers
 
             return View(@event);
         }
-
+        [Authorize(Roles = "administrator")]
         // POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -260,8 +262,7 @@ namespace planinarskoUdruzenjeV3.Controllers
 
             await _context.SaveChangesAsync();
 
-             return RedirectToAction(nameof(Index));
-
+            return RedirectToAction("Details", new { id = id });
          
         }
 
@@ -283,7 +284,7 @@ namespace planinarskoUdruzenjeV3.Controllers
             return Participation.NOT_APPROVED;
 
         }
-
+        [Authorize(Roles = "administrator")]
         private IList<Participant> GetParticipants(int id)
         {
             IList<Participant> participants = new List<Participant>();
