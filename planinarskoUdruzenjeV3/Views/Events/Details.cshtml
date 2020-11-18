@@ -123,12 +123,17 @@ else if (ViewBag.isApproved == Participation.APPROVED)
                         }
 
                     </div>
+
+                    <div class="col-sm-12">
+
+                    </div>
+
                     <div class="row">
                         @foreach (var item in Model.File)
                         {
                             @if (item.IsImage())
                             {
-                                <div class="col-md-4 col-sm-6">
+                                <div class="col-md-4 col-sm-6 pb-4">
                                     <a target="_blank" href="~/File?id=@item.Id">
                                         <img src="~/File?id=@item.Id" class="w-100" style="height:250px">
                                     </a>

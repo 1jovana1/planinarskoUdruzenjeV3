@@ -156,7 +156,7 @@ namespace planinarskoUdruzenjeV3.Controllers
         [Authorize(Roles = "administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Date,Deadline,MaxParticipanst,Location,Price")] Event @event)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Date,Deadline,MaxParticipanst,Location,Price")] Event @event, List<IFormFile> files, int[] oldFiles)
         {
             var _event = await _context.Event.FindAsync(id);
             if (_event == null)
@@ -174,13 +174,48 @@ namespace planinarskoUdruzenjeV3.Controllers
                 _event.Location = @event.Location;
                 _event.Price = @event.Price;
 
+
+                foreach(var oldFileId in oldFiles)
+                {
+                    if(oldFileId != 0)
+                    {
+                        var file = await _context.File.FindAsync(oldFileId);
+                        if(file != null)
+                        {
+                        _context.File.Remove(file);
+                        }
+                    }
+                    
+                }
+
+                foreach (var formFile in files)
+                {
+                    if (formFile.Length > 0)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await formFile.CopyToAsync(memoryStream);
+
+                            var file = new Models.File()
+                            {
+                                FileName = formFile.FileName,
+                                ContentType = formFile.ContentType,
+                                Content = memoryStream.ToArray()
+                            };
+
+                            _event.File.Add(file);
+                        }
+                    }
+
+                }
+
                 _context.Update(_event);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(@event);
+            return View(_event);
         }
 
 

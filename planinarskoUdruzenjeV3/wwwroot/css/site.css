@@ -227,3 +227,12 @@ input:checked + .slider:before {
     background: rgba(255, 255, 255, 0.7);
     font-weight: bold;
 }
+
+
+
+.image-delete {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    cursor: pointer;
+}
