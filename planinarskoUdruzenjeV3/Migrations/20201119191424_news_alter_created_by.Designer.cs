@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using planinarskoUdruzenjeV3.Models;
 
 namespace planinarskoUdruzenjeV3.Migrations
 {
     [DbContext(typeof(PlaninarskoUdruzenjeContext))]
-    partial class PlaninarskoUdruzenjeContextModelSnapshot : ModelSnapshot
+    [Migration("20201119191424_news_alter_created_by")]
+    partial class news_alter_created_by
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -295,7 +297,7 @@ namespace planinarskoUdruzenjeV3.Migrations
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .HasColumnName("content_type")
-                        .HasColumnType("nvarchar(255)")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedAt")
@@ -315,7 +317,7 @@ namespace planinarskoUdruzenjeV3.Migrations
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnName("file_name")
-                        .HasColumnType("nvarchar(255)")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<int?>("NewsId")

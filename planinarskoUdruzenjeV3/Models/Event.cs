@@ -22,8 +22,8 @@ namespace planinarskoUdruzenjeV3.Models
         public int? MaxParticipanst { get; set; }
         public string Location { get; set; }
 
-        //  [DataType(DataType.Custom, ErrorMessage = "Unesite brojnu vrijednost")]
-        [RegularExpression(@"[0-9]*$", ErrorMessage = "Unesite brojnu vrijednost")]
+       
+        [RegularExpression(@"^[0-9]*(?:\.[0-9]+)?$", ErrorMessage = "Unesite brojnu vrijednost")]
         public double? Price { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }

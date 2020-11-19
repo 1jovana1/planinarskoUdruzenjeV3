@@ -127,23 +127,23 @@ else if (ViewBag.isApproved == Participation.APPROVED)
                     <div class="col-sm-12">
 
                     </div>
-
-                    <div class="row">
-                        @foreach (var item in Model.File)
-                        {
-                            @if (item.IsImage())
+                    <div class="col-sm-12">
+                        <div class="row">
+                            @foreach (var item in Model.File)
                             {
-                                <div class="col-md-4 col-sm-6 pb-4">
-                                    <a target="_blank" href="~/File?id=@item.Id">
-                                        <img src="~/File?id=@item.Id" class="w-100" style="height:250px">
-                                    </a>
-                                </div>
+                                @if (item.IsImage())
+                                {
+                                    <div class="col-md-4 col-sm-6 pb-4">
+                                        <a target="_blank" href="~/File?id=@item.Id">
+                                            <img src="~/File?id=@item.Id" class="w-100" style="height:250px">
+                                        </a>
+                                    </div>
+                                }
                             }
-                        }
+                        </div>
                     </div>
 
-
-                </div>
+                    </div>
                 <a asp-action="Index">Nazad</a>
             </div>
 
@@ -312,9 +312,12 @@ else if (ViewBag.isApproved == Participation.APPROVED)
                                             <form asp-action="Activate">
                                                 <input type="hidden" value="@Model.Id" name="eventId" />
                                                 <input type="hidden" value="@participant.UserId" name="userId" />
-                                                <input class="form-check-input" name="isApproved"
-                                                       type="checkbox" @(participant.isApproved ? "checked" : "")
-                                                       onChange="this.form.submit()">
+                                                <label class="switch m-0">
+                                                    <input class="form-check-input"
+                                                           type="checkbox" @(participant.isApproved ? "checked" : "")
+                                                           onChange="this.form.submit()">
+                                                    <span class="slider round"></span>
+                                                </label>
                                             </form>
                                         </td>
                                     </tr>

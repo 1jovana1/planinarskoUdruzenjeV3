@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using planinarskoUdruzenjeV3.Areas.Identity.Data;
 using planinarskoUdruzenjeV3.Models;
 
 namespace planinarskoUdruzenjeV3.Controllers
@@ -15,20 +18,23 @@ namespace planinarskoUdruzenjeV3.Controllers
     public class NewsController : Controller
     {
         private readonly PlaninarskoUdruzenjeContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public NewsController(PlaninarskoUdruzenjeContext context)
+        public NewsController(PlaninarskoUdruzenjeContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult Image(int id)
         {
             var fileToRetrieve = _context.File.Where(x=>x.NewsId == id).FirstOrDefault();
-            if(fileToRetrieve == null)
+            if (fileToRetrieve == null)
             {
-                var path = "~/images/wallpaperflare.com_wallpaper.jpg";
+                var path = "~/images/photo-1473984951266-787b955c9e0b.jpg";
                 return File(path, "image/jpeg");
             }
+
 
             return File(fileToRetrieve.Content, fileToRetrieve.ContentType);
         }
@@ -39,17 +45,18 @@ namespace planinarskoUdruzenjeV3.Controllers
             int pageSize = 6;
             ViewBag.PageNumber = p;
             ViewBag.PageRange = pageSize;
+
             ViewBag.Category = category; 
             if (category != null)
             {
                var news = _context.News.Where(x => x.Category == category);
                ViewBag.TotalPages = (int)Math.Ceiling((decimal)news.Count() / pageSize);
-               news = news.Skip((p - 1) * pageSize).Take(pageSize);
+               news = news.OrderByDescending(e => e.Id).Skip((p - 1) * pageSize).Take(pageSize);
                return View(await news.ToListAsync());
             }
             else
             {
-                var news = _context.News.Skip((p - 1) * pageSize).Take(pageSize);
+                var news = _context.News.OrderByDescending(e => e.Id).Skip((p - 1) * pageSize).Take(pageSize);
                 ViewBag.TotalPages = (int)Math.Ceiling((decimal)_context.News.Count() / pageSize);
                 return View(await news.ToListAsync());
             }
@@ -72,7 +79,7 @@ namespace planinarskoUdruzenjeV3.Controllers
                 return NotFound();
             }
             var createdByUserName = await _context.Users
-                 .Where(x => x.Id ==(news.CreatedBy).ToString())
+                 .Where(x => x.Id == news.CreatedBy)
                  .FirstOrDefaultAsync();
 
             ViewBag.CreatedBy = createdByUserName != null ?
@@ -91,11 +98,11 @@ namespace planinarskoUdruzenjeV3.Controllers
         [Authorize(Roles = "administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Category,CreatedBy,CreatedAt")] News @news, List<IFormFile> files)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Category")] News @news, List<IFormFile> files)
         {
             if (ModelState.IsValid)
             {
-                //_context.Add(news);
+                @news.CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.News.Add(@news);
                 //add file
                 foreach (var formFile in files)
@@ -144,34 +151,60 @@ namespace planinarskoUdruzenjeV3.Controllers
         [Authorize(Roles = "administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Category,CreatedBy,CreatedAt")] News news)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Category")] News news, List<IFormFile> files, int[] oldFiles)
         {
-            if (id != news.Id)
+            var _news = await _context.News.FindAsync(id); 
+
+            if (_news == null)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                _news.Title = news.Title;
+                _news.Description = news.Description;
+                _news.Category = news.Category;
+
+                foreach (var oldFileId in oldFiles)
                 {
-                    _context.Update(news);
-                    await _context.SaveChangesAsync();
+                    if (oldFileId != 0)
+                    {
+                        var file = await _context.File.FindAsync(oldFileId);
+                        if (file != null)
+                        {
+                            _context.File.Remove(file);
+                        }
+                    }
+
                 }
-                catch (DbUpdateConcurrencyException)
+
+                foreach (var formFile in files)
                 {
-                    if (!NewsExists(news.Id))
+                    if (formFile.Length > 0)
                     {
-                        return NotFound();
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await formFile.CopyToAsync(memoryStream);
+
+                            var file = new Models.File()
+                            {
+                                FileName = formFile.FileName,
+                                ContentType = formFile.ContentType,
+                                Content = memoryStream.ToArray()
+                            };
+
+                            _news.File.Add(file);
+                        }
                     }
-                    else
-                    {
-                        throw;
-                    }
+
                 }
+                _context.Update(_news);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(news);
+            return View(_news);
         }
 
         // GET: News/Delete/5

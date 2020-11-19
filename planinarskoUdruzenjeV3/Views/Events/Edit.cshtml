@@ -48,42 +48,40 @@
             <input class="form-control" type="file" id="Avatar" name="files" multiple />
         </div>
         <div class="col-12">
-            <div class="col-sm-12">
-                @foreach (var item in Model.File)
-                {
-                    @if (!item.IsImage())
+
+            @{
+                int i = 0;
+                <div class="row">
+                    @foreach (var item in Model.File)
                     {
-                        <a class="mr-3" href="~/File?id=@item.Id">@item.FileName</a>
+                        @if (!item.IsImage())
+                        {
+                            <input type="hidden" name="oldFiles[@i]" value="0" />
+                            <a class="mr-3" href="~/File?id=@item.Id">@item.FileName</a>
+                            <span class="image-delete" style="position: relative;" data-toggle="modal" data-target="#modal-image-delete" data-image-id="@item.Id">
+                                <i class="fas fa-trash-alt mr-2"></i>
+                            </span>
+                            i = i + 1;
+                        }
                     }
-                }
-
-            </div>
-
-            <div class="row">
-
-                @{
-                    int i = 0;
-                    foreach (var item in Model.File)
+                </div>
+                <div class="row">
+                    @foreach (var item in Model.File)
                     {
-                      
                         @if (item.IsImage())
                         {
                             <div class="col-md-4 col-sm-6 pb-4">
-                                <a target="_blank">
-                                    <input type="hidden" name="oldFiles[@i]" value="0"  />
-                                    <img src="~/File?id=@item.Id" class="w-100" style="height:250px">
-                                    <span class="image-delete" data-toggle="modal" data-target="#modal-image-delete" data-image-id="@item.Id">
-                                        <i class="fas fa-trash-alt mr-2"></i>
-                                    </span>
-                                </a>
+                                <input type="hidden" name="oldFiles[@i]" value="0" />
+                                <img src="~/File?id=@item.Id" class="w-100" style="height:250px">
+                                <span class="image-delete" data-toggle="modal" data-target="#modal-image-delete" data-image-id="@item.Id">
+                                    <i class="fas fa-trash-alt mr-2"></i>
+                                </span>
                             </div>
+                            i = i + 1;
                         }
-                        i = i + 1;
                     }
-                 }
-
                 </div>
-
+            }
         </div>
         <div class="col-12 text-right">
             <a class="btn btn-link ml-auto" type="button" asp-action="Index">Nazad</a>
@@ -104,7 +102,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                Da li ste sigurni da želite izbrisati ovu slicku?
+                Da li ste sigurni da želite izbrisati ovu sliku?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Odustani</button>
@@ -123,6 +121,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         CKEDITOR.replace("Description");
+
         $("#btn-delete-image").click(function () {
             var imageId = $(this).data('imageId');
             var parentDiv = $("*[data-image-id=\"" + imageId + "\"]").closest('div');
