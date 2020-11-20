@@ -5,40 +5,57 @@
     ViewData["Title"] = "Korisnički nalozi";
 }
 
-<h1>Korisnički nalozi</h1>
-<div class="scrollableTable pozadina">
-<table id="dtBasicExample" class="table table-striped text-center table-bordered table-sm" cellspacing="0" width="100%">
-    <thead>
-        <tr>
-            <th class="th-sm">Ime</th>
-            <th class="th-sm">Prezime</th>
-            <th class="th-sm">Email</th>
-            <th class="th-sm">Telefon</th>
-            <th class="th-sm">Uloga</th>
-            <th class="th-sm">Aktivan</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.FirstName</td>
-                <td>@user.LastName</td>
-                <td>@user.Email</td>
-                <td>@user.PhoneNumber</td>
-                <td>@string.Join(" , ", user.Roles.ToList())</td>
-                <td>
-                    <form asp-action="Activate" asp-route-id="@user.UserId">
-                        <label class="switch m-0">
-                            <input class="form-check-input"
-                                   type="checkbox" @(user.isActive ? "checked" : "")
-                                   onChange="this.form.submit()">
-                            <span class="slider round"></span>
-                        </label>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-transparent">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-user mr-4"></i>Korisnički nalozi
+                </h2>
+            </div>
+            <div class="card-body pozadina">
+                <div class="row">
+                    <table id="dtBasicExample" class="table table-striped text-center table-bordered table-sm" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="th-sm">Ime</th>
+                                <th class="th-sm">Prezime</th>
+                                <th class="th-sm">Email</th>
+                                <th class="th-sm">Telefon</th>
+                                <th class="th-sm">Uloga</th>
+                                <th class="th-sm">Aktivan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                <tr>
+                                    <td>@user.FirstName</td>
+                                    <td>@user.LastName</td>
+                                    <td>@user.Email</td>
+                                    <td>@user.PhoneNumber</td>
+                                    <td>@string.Join(" , ", user.Roles.ToList())</td>
+                                    <td>
+                                        <form asp-action="Activate" asp-route-id="@user.UserId">
+                                            <label class="switch m-0">
+                                                <input class="form-check-input"
+                                                       type="checkbox" @(user.isActive ? "checked" : "")
+                                                       onChange="this.form.submit()">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex w-100 justify-content-center">
+    <pagination page-count="@ViewBag.TotalPages" page-target="/user/index/" page-number="@ViewBag.PageNumber" page-range="@ViewBag.PageRange"></pagination>
 </div>

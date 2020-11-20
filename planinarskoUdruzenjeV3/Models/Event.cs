@@ -17,7 +17,9 @@ namespace planinarskoUdruzenjeV3.Models
         public string Title { get; set; }
         public string Description { get; set; }
     
+        [Required(ErrorMessage ="Unesite datum")]
         public DateTime Date { get; set; }
+        [Required(ErrorMessage = "Unesite datum")]
         public DateTime Deadline { get; set; }
         public int? MaxParticipanst { get; set; }
         public string Location { get; set; }

@@ -32,7 +32,8 @@ namespace planinarskoUdruzenjeV3.Controllers
         }
         public IActionResult Image(int id)
         {
-            var fileToRetrieve = _context.File.Where(x => x.EventId == id).FirstOrDefault();
+            var fileToRetrieve = _context.File.Where(x => x.EventId == id && x.ContentType.StartsWith("image"))
+                                .FirstOrDefault();
             if (fileToRetrieve == null)
             {
                 var path = "~/images/photo-1473984951266-787b955c9e0b.jpg";
@@ -173,7 +174,6 @@ namespace planinarskoUdruzenjeV3.Controllers
                 _event.MaxParticipanst = @event.MaxParticipanst;
                 _event.Location = @event.Location;
                 _event.Price = @event.Price;
-
 
                 foreach(var oldFileId in oldFiles)
                 {

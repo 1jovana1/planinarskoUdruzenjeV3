@@ -23,9 +23,15 @@ namespace planinarskoUdruzenjeV3.Controllers
             _roleManager = roleManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int p=1)
         {
-            var users = await _userManager.Users.ToListAsync();
+
+            int pageSize = 8;
+            var users = await _userManager.Users
+                .OrderByDescending(u => u.Id)
+                .Skip((p - 1) * pageSize).Take(pageSize)
+                .ToListAsync();
+
             var userRolesViewModel = new List<UserRolesViewModel>();
             foreach (User user in users)
             {
@@ -39,6 +45,11 @@ namespace planinarskoUdruzenjeV3.Controllers
                 thisViewModel.isActive = user.EmailConfirmed;
                 userRolesViewModel.Add(thisViewModel);
             }
+
+            ViewBag.PageNumber = p;
+            ViewBag.PageRange = pageSize;
+            ViewBag.TotalPages = (int)Math.Ceiling((decimal)_userManager.Users.Count() / pageSize);
+
             return View(userRolesViewModel);
         }
 

@@ -28,7 +28,8 @@ namespace planinarskoUdruzenjeV3.Controllers
 
         public IActionResult Image(int id)
         {
-            var fileToRetrieve = _context.File.Where(x=>x.NewsId == id).FirstOrDefault();
+            var fileToRetrieve = _context.File.Where(x=>x.NewsId == id && x.ContentType.StartsWith("image"))
+                .FirstOrDefault();
             if (fileToRetrieve == null)
             {
                 var path = "~/images/photo-1473984951266-787b955c9e0b.jpg";
@@ -68,11 +69,7 @@ namespace planinarskoUdruzenjeV3.Controllers
         // GET: News/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
+            
             var news = await _context.News.Include(x=>x.File).FirstOrDefaultAsync(m => m.Id == id);
             if (news == null)
             {
