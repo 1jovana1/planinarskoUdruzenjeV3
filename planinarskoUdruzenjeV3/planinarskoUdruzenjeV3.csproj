@@ -31,10 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\lib\dropzone\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\lib\mdbootstrap\css\addons\datatables-select.min.css.map" />
     <None Include="wwwroot\lib\mdbootstrap\css\addons\datatables-select2.min.css.map" />
     <None Include="wwwroot\lib\mdbootstrap\css\addons\datatables.min.css.map" />

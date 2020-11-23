@@ -23,7 +23,6 @@ namespace planinarskoUdruzenjeV3
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -31,7 +30,6 @@ namespace planinarskoUdruzenjeV3
             services.AddRazorPages();
 
             services.AddDbContext<PlaninarskoUdruzenjeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PlaninarskoUdruzenjeContext")));
-
 
             services.AddAuthentication().
                 AddFacebook(facebookOptions =>
@@ -46,7 +44,6 @@ namespace planinarskoUdruzenjeV3
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

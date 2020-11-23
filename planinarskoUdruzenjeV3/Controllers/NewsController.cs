@@ -43,7 +43,7 @@ namespace planinarskoUdruzenjeV3.Controllers
         // GET: News
         public async Task<IActionResult> Index(string category, int p=1)
         {
-            int pageSize = 6;
+            int pageSize = 4;
             ViewBag.PageNumber = p;
             ViewBag.PageRange = pageSize;
 
