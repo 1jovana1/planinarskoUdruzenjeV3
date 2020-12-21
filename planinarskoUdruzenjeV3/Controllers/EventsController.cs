@@ -78,6 +78,11 @@ namespace planinarskoUdruzenjeV3.Controllers
 
             ViewBag.isApproved = IsRegistered(id);
             ViewBag.Participants = GetParticipants(id);
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.CanComment = _context.Participation
+                                .Where(x => x.EventId == id && x.UserId == userId)
+                                .Count();
             //komentari
             var listOfComments = GetComments(id);
             ViewBag.Comments = listOfComments;

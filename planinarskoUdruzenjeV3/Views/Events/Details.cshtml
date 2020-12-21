@@ -161,7 +161,7 @@ else if (ViewBag.isApproved == Participation.APPROVED)
                     <div class="card-title">
                         @if (DateTime.Now > Model.Date)
                         {
-                            <h3 class="card-title"><i class="fas fa-star mr-2"></i>@ViewBag.Average</h3>
+                            <h3 class="card-title"><i class="fas fa-star mr-2"></i>@ViewBag.Average.ToString("0.0")</h3>
                         }
                     </div>
                 </div>
@@ -174,7 +174,7 @@ else if (ViewBag.isApproved == Participation.APPROVED)
                 @* Forma za unos komentara *@
                 @if (User.IsInRole("korisnik") || User.IsInRole("administrator"))
                 {
-                    @if ((DateTime.Now > Model.Date) && DateTime.Now <= Model.Date.AddDays(10))
+                    @if ((DateTime.Now > Model.Date) && DateTime.Now <= Model.Date.AddDays(10) && ViewBag.CanComment>0)
                     {
                         <form asp-action="Rating">
                             <div class="form-group row">
